@@ -1,0 +1,14 @@
+{
+  "navigationBarTitleText": "刀刀易物",
+  "onReachBottomDistance": 10,
+  "backgroundTextStyle": "light",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "goods-list": "/components/goods-list/index",
+    "t-loading": "tdesign-miniprogram/loading/loading",
+    "t-search": "tdesign-miniprogram/search/search",
+    "t-tabs": "tdesign-miniprogram/tabs/tabs",
+    "t-tab-panel": "tdesign-miniprogram/tab-panel/tab-panel",
+    "t-icon": "tdesign-miniprogram/icon/icon"
+  }
+}
