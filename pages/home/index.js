@@ -7,7 +7,7 @@ Page({
         key: 0,
       },
       {
-        text: '二手',
+        text: '闲置',
         key: 1,
       },
       {
@@ -19,6 +19,51 @@ Page({
         key: 3,
       },
     ],
+    location: "滑铁卢",
+    goodsList: [
+      {
+        id: '88888888',
+        priImg: 'https://cdn-we-retail.ym.tencent.com/tsr/goods/nz-09a.png',
+        title: '白色短袖连衣裙',
+        price: 34,
+        originPrice: 35,
+      },
+      {
+        id: '88888888',
+        priImg: 'https://cdn-we-retail.ym.tencent.com/tsr/goods/dz-3a.png',
+        title: '短袖',
+        price: 3456,
+        originPrice: 9999,
+      },
+      {
+        id: '88888888',
+        priImg: 'https://cdn-we-retail.ym.tencent.com/tsr/goods/dz-2a.png',
+        title: '白色短袖连衣裙',
+        price: 4,
+        originPrice: 3,
+      },
+      {
+        id: '88888888',
+        priImg: 'https://cdn-we-retail.ym.tencent.com/tsr/goods/nz-17a.png',
+        title: '白色短袖连衣裙',
+        price: 4,
+        originPrice: 3,
+      },
+      {
+        id: '88888888',
+        priImg: 'https://cdn-we-retail.ym.tencent.com/tsr/goods/nz-09a.png',
+        title: '白色短袖连衣裙',
+        price: 4,
+        originPrice: 3,
+      },
+      {
+        id: '88888888',
+        priImg: 'https://cdn-we-retail.ym.tencent.com/tsr/goods/dz-3a.png',
+        title: '白色短袖连衣裙',
+        price: 4,
+        originPrice: 3,
+      },
+    ]
   },
 
   privateData: {
@@ -47,10 +92,14 @@ Page({
     wx.stopPullDownRefresh();
 
     this.setData({
-      pageLoading: true,
+      // pageLoading: true,
     });
 
     // this.loadGoodsList(true);
+  },
+
+  navToSearchPage() {
+    // wx.navigateTo({ url: '/pages/goods/search/index' });
   },
 
   tabChangeHandle(e) {
@@ -58,8 +107,15 @@ Page({
     // this.loadGoodsList(true);
   },
 
-  navToSearchPage() {
-    // wx.navigateTo({ url: '/pages/goods/search/index' });
-  }
+  locationChangeHandle(e) {
 
+  },
+
+  goodListClickHandle(e) {
+
+  },
+
+  goodListLikeHandle(e) {
+
+  }
 });

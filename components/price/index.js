@@ -4,23 +4,23 @@ Component({
   properties: {
     priceUnit: {
       type: String,
-      value: 'fen',
-    }, // 价格单位，分 | 元, fen，yuan
+      value: 'unit',
+    }, // 价格单位，cent or unit
     price: {
       type: null,
       value: '',
       observer(price) {
         this.format(price);
       },
-    }, // 价格, 以分为单位
+    }, // 价格, 以unit为单位
     type: {
       type: String,
       value: '', //
     }, //  main 粗体, lighter 细体, mini 黑色, del 中划线, delthrough 中划线，包括货币符号
     symbol: {
       type: String,
-      value: '¥', // '￥',
-    }, // 货币符号，默认是人民币符号￥
+      value: '$', // '$',
+    }, // 货币符号，默认是$
     fill: Boolean, // 是否自动补齐两位小数
     decimalSmaller: Boolean, // 小数字号小一点
     lineThroughWidth: {
@@ -42,7 +42,7 @@ Component({
         if (isMinus) {
           price = -price;
         }
-        if (this.properties.priceUnit === 'yuan') {
+        if (this.properties.priceUnit === 'unit') {
           const priceSplit = price.toString().split('.');
           pArr[0] = priceSplit[0];
           pArr[1] = !priceSplit[1]

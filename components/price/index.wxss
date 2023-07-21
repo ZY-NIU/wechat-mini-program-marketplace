@@ -34,7 +34,7 @@
   }
   .delthrough .line {
     position: absolute;
-    top: 50%;
+    top: 55%;
     left: 0;
     right: 0;
     transform: translateY(-50%);
@@ -46,11 +46,11 @@
     display: inline;
     color: inherit;
     font-size: inherit;
-    font-size: 0.8em;
+    font-size: 27rpx;
   }
   .pprice {
     display: inline;
-    margin: 0 0 0 4rpx;
+    margin: 0 0 0 1rpx;
   }
   .integer {
     color: inherit;

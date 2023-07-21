@@ -29,7 +29,7 @@ Component({
     },
     currency: {
       type: String,
-      value: '¥',
+      value: '$',
     },
 
     thresholds: {
@@ -71,10 +71,10 @@ Component({
       this.triggerEvent('thumb', { goods: this.data.goods });
     },
 
-    addCartHandle(e) {
+    addLikeHandle(e) {
       const { id } = e.currentTarget;
       const { id: cardID } = e.currentTarget.dataset;
-      this.triggerEvent('add-cart', {
+      this.triggerEvent('add-like', {
         ...e.detail,
         id,
         cardID,
