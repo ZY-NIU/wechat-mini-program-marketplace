@@ -1,0 +1,96 @@
+<view class="goods-detail-page">
+  <t-swiper
+    wx:if="{{details.images.length > 0}}"
+    height="610rpx"
+    current="{{current}}"
+    autoplay="{{autoplay}}"
+    duration="{{duration}}"
+    interval="{{interval}}"
+    navigation="{{navigation}}"
+    list="{{details.images}}"
+  ></t-swiper>
+
+  <view class="goods-info">
+    <view class="goods-title">
+      <view class="goods-name">{{details.title}}</view>
+    </view>
+
+    <view class="goods-price">
+      <price
+        wx:if="{{ details.price }}"
+        wr-class="spec-for-price"
+        symbol-class="spec-for-symbol"
+        symbol="{{currency}}"
+        price="{{details.price}}"
+      />
+      <price
+        wx:if="{{ details.originPrice && isValidityLinePrice }}"
+        wr-class="goods-card__origin-price"
+        symbol-class="spec-for-symbol"
+        symbol="{{currency}}"
+        price="{{details.originPrice}}"
+        type="delthrough"
+      />
+    </view>
+
+    <text class="goods-intro">{{details.description}}</text>
+
+    <view class="attribute-row" wx:for="{{ details.attributes }}" wx:for-item="attribute">
+      <view class="attribute-name">{{attribute.attribute}}</view>
+      <view class="attribute-value">{{attribute.value}}</view>
+    </view>
+  </view>
+
+  <view class="seller-wrap">
+    <view class="seller-title">卖家信息</view>
+    <view class="seller-bar">
+      <view class="seller-head">
+        <t-image src="{{userHeadUrl}}" t-class="seller-avatar" />
+        <view class="seller-head-right">
+          <view class="seller-username">{{userName}}</view>
+        </view>
+      </view>
+      <view class="chat"><t-icon name="chat" size="50rpx" /></view>
+    </view>
+
+    <view class="location-title">交易地址</view>
+    <view wx:if="{{ details.meetup.public }}" class="location-preference">
+      <view ><t-icon prefix="wr" name="group" size="40rpx" /></view>
+      <view class="text">公共场所交易</view>
+    </view>
+    <view wx:if="{{ details.meetup.pickup && details.meetup.deliver }}" class="location-preference">
+      <view ><t-icon name="home" size="40rpx" /></view>
+      <view class="text">自提或送货上门</view>
+    </view>
+    <view wx:elif="{{ details.meetup.pickup }}" class="location-preference">
+      <view ><t-icon name="home" size="40rpx" /></view>
+      <view class="text">自提</view>
+    </view>
+    <view wx:elif="{{ details.meetup.deliver }}" class="location-preference">
+      <view ><t-icon name="home" size="40rpx" /></view>
+      <view class="text">可送货</view>
+    </view>
+
+    <view class="show-map-container">
+      <map
+        class="map"
+        enable-overlooking="true"
+        latitude="23"
+        longitude="113"
+        scale="15"
+        radius="320"
+        fillColor="000"
+      ></map>
+    </view>
+
+  </view>
+</view>
+
+<view class="goods-bottom-operation">
+  <bottom-bar
+    bind:toSendMessage="toChat"
+    bind:toShare="toShare"
+    bind:toSave="toSave"
+  />
+</view>
+<t-toast id="t-toast" />

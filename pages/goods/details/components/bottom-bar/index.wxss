@@ -1,0 +1,15 @@
+.footer-cont {
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 16rpx 40rpx;
+}
+
+.flex-row {
+  display: flex;
+  align-items: center;
+}
+
+.flex-row-padding {
+  padding-left: 38rpx;
+}

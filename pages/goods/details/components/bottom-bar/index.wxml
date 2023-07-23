@@ -1,0 +1,15 @@
+<view class="footer-cont">
+  <view class="flex-row">
+    <view bindtap="toChat">
+      <t-icon name="chat" size="50rpx" />
+    </view>
+    <view class="flex-row-padding" bindtap="toShare">
+      <t-icon prefix="wr" name="share" size="50rpx" />
+    </view>
+  </view>
+
+  <view class="flex-row" bindtap="toSave">
+    <t-icon prefix="wr"  name="star" size="50rpx" />
+  </view>
+		
+</view>

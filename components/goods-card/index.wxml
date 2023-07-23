@@ -26,6 +26,7 @@
 				<price
 					wx:if="{{ goods.originPrice && isValidityLinePrice }}"
 					wr-class="goods-card__origin-price"
+					symbol-class="spec-for-symbol"
 					symbol="{{currency}}"
 					price="{{goods.originPrice}}"
 					type="delthrough"
@@ -43,11 +44,12 @@
 			<view >
 				<t-icon
 					class="goods-card__like"
-					name="heart"
+					prefix="wr"
+					name="star"
 					id="{{independentID}}-like"
 					data-id="{{independentID}}"
 					catchtap="addLikeHandle"
-					size="48rpx"
+					size="42rpx"
 					color="#333"
 				/>
 			</view>

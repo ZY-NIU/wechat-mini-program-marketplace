@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/home/index",
+    "pages/goods/details/index",
     "pages/selling/index",
     "pages/message/index",
     "pages/usercenter/index"
