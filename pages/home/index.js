@@ -51,7 +51,7 @@ Page({
       },
       {
         id: 5,
-        title: 'personal computer',
+        title: 'personal computer, mouse',
         price: 4,
         originPrice: 3,
         priImg: 'https://cdn-we-retail.ym.tencent.com/tsr/goods/nz-09a.png',

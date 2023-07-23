@@ -45,6 +45,7 @@ Component({
         if (this.properties.priceUnit === 'unit') {
           const priceSplit = price.toString().split('.');
           pArr[0] = priceSplit[0];
+          pArr[0] = this.addComma(pArr[0]);
           pArr[1] = !priceSplit[1]
             ? '00'
             : priceSplit[1].length === 1
@@ -67,5 +68,12 @@ Component({
       }
       this.setData({ pArr });
     },
+
+    addComma(price) {
+      var tmp =  Number(price).toString();
+      var integerPart = tmp.split("").reverse().join("").replace(/(\d{3})(?=\d)/g, "$1,");
+
+      return integerPart.split("").reverse().join("")
+    }
   },
 });
