@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "",
+  "usingComponents": {
+    "price": "/components/price/index",
+    "t-icon": "tdesign-miniprogram/icon/icon"
+  }
+}

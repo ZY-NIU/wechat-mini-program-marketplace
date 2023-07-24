@@ -2,6 +2,7 @@
   "pages": [
     "pages/home/index",
     "pages/goods/details/index",
+    "pages/goods/create/item/index",
     "pages/selling/index",
     "pages/message/index",
     "pages/usercenter/index"

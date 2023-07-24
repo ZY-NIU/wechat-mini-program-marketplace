@@ -66,6 +66,18 @@
           "pathName": "pages/goods/details/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "示例页-出售",
+          "pathName": "pages/selling/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "示例页-新建",
+          "pathName": "pages/goods/create/item/index",
+          "query": "",
+          "scene": null
         }
       ]
     }

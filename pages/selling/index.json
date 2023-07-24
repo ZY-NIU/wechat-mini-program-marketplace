@@ -1,4 +1,8 @@
 {
-  "usingComponents": {},
-  "navigationBarTitleText": "出售"
+  "navigationBarTitleText": "我的交易",
+  "usingComponents": {
+    "t-image": "/components/webp-image/index",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-popup": "tdesign-miniprogram/popup/popup"
+  }
 }

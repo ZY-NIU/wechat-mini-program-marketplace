@@ -1,2 +1,42 @@
-<!--pages/selling/index.wxml-->
-<text>pages/selling/index.wxml</text>
+<view class="selling-wrap">
+  <view class="selling-bar">
+    <view class="selling-head">
+      <t-image src="{{userHeadUrl}}" t-class="selling-avatar" />
+    </view>
+    <view class="create-trade" bindtap="createTrade">
+      <t-icon prefix="wr" name="add_circle" size="39rpx" weight="100"></t-icon>
+      <view class="text">新建交易</view>
+    </view>
+  </view>
+
+</view>
+<t-popup visible="{{isCreateTradePopupShow}}" placement="top" bind:visible-change="handlePopupHide">
+  <view class="popup-container">
+    <view class="title">提供</view>
+    <view class="item">
+      <t-icon prefix="wr" name="goods_exchange" size="48rpx" ></t-icon>
+      <view class="text">商品</view>
+    </view>
+    <view class="item">
+      <t-icon name="home" size="48rpx" ></t-icon>
+      <view class="text">房屋</view>
+    </view>
+    <view class="item">
+      <t-icon prefix="wr" name="deliver" size="48rpx" ></t-icon>
+      <view class="text">拼车</view>
+    </view>
+    <view class="title">寻求</view>
+    <view class="item">
+      <t-icon prefix="wr" name="goods_exchange" size="48rpx" ></t-icon>
+      <view class="text">商品</view>
+    </view>
+    <view class="item">
+      <t-icon name="home" size="48rpx" ></t-icon>
+      <view class="text">房屋</view>
+    </view>
+    <view class="item">
+      <t-icon prefix="wr" name="deliver" size="48rpx" ></t-icon>
+      <view class="text">拼车</view>
+    </view>
+  </view>
+</t-popup>
