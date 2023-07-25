@@ -49,7 +49,7 @@
 					id="{{independentID}}-like"
 					data-id="{{independentID}}"
 					catchtap="addLikeHandle"
-					size="42rpx"
+					size="48rpx"
 					color="#333"
 				/>
 			</view>

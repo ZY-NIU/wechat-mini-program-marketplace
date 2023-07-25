@@ -51,10 +51,10 @@
   /* justify-content: flex-start; */
   /* align-items: baseline; */
   line-height: 32rpx;
-  margin: 0 4rpx 8rpx 0;
+  margin: 6rpx 4rpx 8rpx 0;
   padding-left: 5rpx;
   align-items: center;
-  padding-bottom: 4rpx;
+  padding-bottom: 6rpx;
 }
 
 .spec-for-price {
