@@ -9,6 +9,99 @@ const labelsOptions = [
 
 Page({
 
+  uploadImages: function() {
+    let a = this;
+    wx.showActionSheet({
+        itemList: [ "从相册中选择", "拍照" ],
+        itemColor: "#666",
+        success: function(e) {
+          if (e.tapIndex == 0) {
+            a.chooseWxImage("album");
+          } else if (e.tapIndex == 1) {
+            a.chooseWxImage("camera");
+          }
+        }
+    });
+  },
+  chooseWxImage: function(type) {
+    let a = this;
+    wx.chooseImage({
+      sizeType: [ "compressed" ],
+      sourceType: [ type ],
+      count: 9 - a.data.imagesPath.length,
+      success: function(e) {
+        var imageOk = true;
+        for (var i = 0; i < e.tempFiles.length; i++) {
+          if (e.tempFiles[i].size > 2097152) {
+            wx.showModal({
+              title: "提示",
+              content: "选择的图片过大，请上传不超过2M的图片",
+              showCancel: !1,
+              success: function(e) {
+                  e.confirm;
+                  imageOk = false;
+              }
+            })
+          }
+        }
+        
+        if (imageOk) {
+          a.setData({
+            imagesPath: a.data.imagesPath.concat(e.tempFilePaths),
+          });
+
+          if (a.data.imagesPath.length >= 9) {
+            a.setData({
+              addImages: false,
+            });
+          }
+        }
+      }
+    });
+  },
+  deleteImage: function(e) {
+    var imgsPath = this.data.imagesPath;
+    var index = e.currentTarget.dataset.index;
+    imgsPath.splice(index, 1);
+    this.setData({
+      imagesPath: imgsPath,
+      addImages: true
+    });
+  },
+  uploadFiles: function(e) {
+    wx.showLoading({
+        title: "上传中"
+    });
+    wx.uploadFile({
+      url:url,
+      filePath: e,//图片路径
+      name: "user_avatar",
+      formData: {
+        token: a.globalData.token,
+        user_avatar: "filePath"
+      },
+      header: {
+        "Content-Type": "multipart/form-data"
+      },
+      success: function(a) {
+        wx.hideLoading();
+        wx.showToast({
+          title: "上传成功",
+          icon: "success",
+          duration: 3000
+        });
+      },
+      fail: function(a) {
+        wx.hideLoading();
+        wx.showToast({
+          title: "上传失败",
+          icon: "none",
+          duration: 3000
+        });
+      }
+    });
+  },
+
   hasTitle(e) {
     if (e.detail.value.length > 0) {
       this.setData({
@@ -42,16 +135,36 @@ Page({
       });
     }
   },
-
-  options: {
-    multipleSlots: true,
+  bindPickerChange: function(e) {
+    this.setData({
+      condIndex: e.detail.value
+    })
   },
-  externalClasses: ['theme-wrapper-class'],
+  changeLocation(e) {
+
+  },
+
+  // options: {
+  //   multipleSlots: true,
+  // },
+  // externalClasses: ['theme-wrapper-class'],
 
   data: {
+    imagesPath: [
+      'https://cdn-we-retail.ym.tencent.com/tsr/goods/nz-09a.png',
+      'https://cdn-we-retail.ym.tencent.com/tsr/goods/nz-09b.png',
+      'https://cdn-we-retail.ym.tencent.com/tsr/goods/nz-09a.png',
+      'https://cdn-we-retail.ym.tencent.com/tsr/goods/nz-09a.png',
+      'https://cdn-we-retail.ym.tencent.com/tsr/goods/nz-09b.png',
+      'https://cdn-we-retail.ym.tencent.com/tsr/goods/nz-09a.png'
+    ],
+    addImages: true,
     titleFocus: false,
     priceFocus: false,
     descriptionFocus: false,
+    condIndex: 4,
+    condArray: ['全新', '二手 - 99新', '二手 - 微瑕', '二手 - 良好', '二手'],
+    location: "Waterloo",
 
 
 

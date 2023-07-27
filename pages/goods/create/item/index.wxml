@@ -1,10 +1,39 @@
 <view class="create-item">
   <form class="form-content">
     <view class="input-wrap">
+      <view class="outer-title"> 照片 </view>
+      <scroll-view scroll-x="true" class="image-container">
+        <image 
+          wx:for="{{imagesPath}}"
+          wx:for-item="item"
+          wx:key="index"
+          class="image"
+          src="{{item}}"
+          mode="aspectFill"
+        >
+          <t-icon
+            class="delete-image"
+            size="42rpx"
+            color="#666"
+            name="close"
+            data-index="{{index}}"
+            bindtap="deleteImage"></t-icon>
+        </image>
+
+        <view wx:if="{{addImages}}" class="image-add" bindtap="uploadImages">
+          <view class="image-add-sign">
+            <t-icon name="add" size="48rpx" color="#666"></t-icon>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <view class="input-wrap">
       <view wx:if="{{titleFocus}}" class="outer-title"> 标题 </view>
       <view class="content-input">
         <textarea
           maxlength="80"
+          class="input"
           placeholder="标题"
           placeholder-class="placeholder"
           auto-height="{{true}}"
@@ -21,6 +50,7 @@
         <input
           maxlength="10"
           type="number"
+          class="input"
           placeholder="价格"
           placeholder-class="placeholder"
           name="price"
@@ -34,6 +64,7 @@
       <view class="content-input" style="align-items: flex-start;">
         <textarea
           maxlength="500"
+          class="input"
           placeholder="描述"
           placeholder-class="placeholder"
           auto-height="{{true}}"
@@ -43,6 +74,36 @@
       </view>
     </view>
 
+    <view class="input-wrap">
+      <view class="outer-title"> 状况 </view>
+      <view class="content-input">
+        <picker
+          mode="selector"
+          class="input"
+          value="{{condIndex}}"
+          range="{{condArray}}"
+          name="condition"
+          bindchange="bindPickerChange"
+        >
+          <view >{{condArray[condIndex]}}</view>
+        </picker>
+      </view>
+    </view>
+
+    <view class="input-wrap">
+      <view class="outer-title"> 地点 </view>
+      <view class="content-input" bind:tap="changeLocation">
+        <text class="input" name="location">{{location}}</text>
+      </view>
+    </view>
+
+    <view class="input-wrap">
+      <view class="content-select">
+        <label class="wrap">
+          <checkbox name="deliver" /> <text >支持送货上门</text>
+        </label>
+      </view>
+    </view>
 
     <view class="submit" bindtap="formSubmit">
       <view class="text">发布</view>
