@@ -135,9 +135,14 @@ Page({
       });
     }
   },
-  bindPickerChange: function(e) {
+  bindCondPickerChange: function(e) {
     this.setData({
       condIndex: e.detail.value
+    })
+  },
+  bindPriceSignPickerChange: function(e) {
+    this.setData({
+      priceSignIndex: e.detail.value
     })
   },
   changeLocation(e) {
@@ -162,6 +167,8 @@ Page({
     titleFocus: false,
     priceFocus: false,
     descriptionFocus: false,
+    priceSignIndex: 0,
+    priceSignArray: ['CAD$', 'CNY¥'],
     condIndex: 4,
     condArray: ['全新', '二手 - 99新', '二手 - 微瑕', '二手 - 良好', '二手'],
     location: "Waterloo",

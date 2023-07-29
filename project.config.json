@@ -78,6 +78,12 @@
           "pathName": "pages/goods/create/item/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "示例页-我的",
+          "pathName": "pages/usercenter/index",
+          "query": "",
+          "scene": null
         }
       ]
     }
