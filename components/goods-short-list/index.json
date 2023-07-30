@@ -1,4 +1,6 @@
 {
   "component": true,
-  "usingComponents": {}
+  "usingComponents": {
+    "goods-short-card": "/components/goods-short-card/index"
+  }
 }

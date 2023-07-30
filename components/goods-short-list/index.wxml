@@ -1,2 +1,15 @@
-<!--components/goods-short-list/index.wxml-->
-<text>components/goods-short-list/index.wxml</text>
+<view class="goods-list-wrap wr-class" id="{{independentID}}">
+	<block wx:for="{{goodsList}}" wx:for-item="item" wx:key="index">
+		<goods-short-card
+		  id="{{independentID}}-gd-{{index}}"
+		  data="{{item}}"
+		  currency="{{item.currency || '$'}}"
+		  thresholds="{{thresholds}}"
+		  class="goods-card-inside"
+		  data-index="{{index}}"
+		  bind:thumb="onClickGoodsThumb"
+		  bind:click="onClickGoods"
+		  bind:edit="onAddCart"
+		/>
+	</block>
+</view>

@@ -1,3 +1,9 @@
 {
-  "usingComponents": {}
+  "navigationBarTitleText": "",
+  "usingComponents": {
+    "t-image": "/components/webp-image/index",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "goods-short-list": "/components/goods-short-list/index",
+    "bottom-bar": "/components/bottom-bar/index"
+  }
 }

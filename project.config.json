@@ -86,6 +86,12 @@
           "scene": null
         },
         {
+          "name": "示例页-消息",
+          "pathName": "pages/message/index",
+          "query": "",
+          "scene": null
+        },
+        {
           "name": "示例页-我的",
           "pathName": "pages/usercenter/index",
           "query": "",
