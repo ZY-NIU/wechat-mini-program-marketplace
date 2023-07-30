@@ -74,6 +74,12 @@
           "scene": null
         },
         {
+          "name": "示例页-商品列表",
+          "pathName": "pages/goods/lists/index",
+          "query": "",
+          "scene": null
+        },
+        {
           "name": "示例页-新建",
           "pathName": "pages/goods/create/item/index",
           "query": "",

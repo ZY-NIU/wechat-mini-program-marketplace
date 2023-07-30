@@ -9,13 +9,30 @@
     </view>
   </view>
 
+  <view class="content-wrapper">
+    <view class="item">
+      <t-icon prefix="wr" name="goods_exchange" size="45rpx" color="#999999" />
+      <view class="title">我的物品</view>
+    </view>
+
+    <view class="item">
+      <t-icon name="search" size="45rpx" color="#999999" />
+      <view class="title">寻找物品</view>
+    </view>
+
+    <view class="item">
+      <t-icon prefix="wr" name="succeed" size="45rpx" color="#999999" />
+      <view class="title">结束交易</view>
+    </view>
+  </view>
+
 </view>
 <t-popup visible="{{isCreateTradePopupShow}}" placement="top" bind:visible-change="handlePopupHide">
   <view class="popup-container">
     <view class="title">提供</view>
     <view class="item">
       <t-icon prefix="wr" name="goods_exchange" size="48rpx" ></t-icon>
-      <view class="text">商品</view>
+      <view class="text">物品</view>
     </view>
     <view class="item">
       <t-icon name="home" size="48rpx" ></t-icon>
@@ -29,7 +46,7 @@
     <view class="title">寻求</view>
     <view class="item">
       <t-icon prefix="wr" name="goods_exchange" size="48rpx" ></t-icon>
-      <view class="text">商品</view>
+      <view class="text">物品</view>
     </view>
     <view class="item">
       <t-icon name="home" size="48rpx" ></t-icon>

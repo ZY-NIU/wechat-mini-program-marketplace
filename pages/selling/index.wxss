@@ -59,7 +59,8 @@
   flex-basis: 100%;
   display: flex;
   align-items: center;
-  padding-top: 8rpx;
+  padding-top: 4rpx;
+  margin-bottom: 4rpx;
 }
 
 .popup-container .item {
@@ -82,4 +83,35 @@
   background-color: #f5f5f5;
   margin-top: 3rpx;
   margin-bottom: 3rpx;
+}
+
+/* menu */
+.content-wrapper {
+  position: relative;
+  margin-top: 100rpx;
+  /* padding: 0 30rpx; */
+}
+
+.content-wrapper .item {
+  display: flex;
+  align-items: center;
+  background-color: #F0F0F0;
+  border-radius: 20rpx;
+  padding: 0 28rpx;
+  /* margin-right: 30rpx; */
+  margin-top: 25rpx;
+  margin-bottom: 25rpx;
+}
+
+.content-wrapper .item .title {
+  font-size: 28rpx;
+  margin-left: 10rpx;
+  padding: 25rpx 0;
+}
+
+.divider-line {
+  width: 100%;
+  height: 5rpx;
+  margin-top: 20rpx;
+  margin-bottom: 20rpx;
 }

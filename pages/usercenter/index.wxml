@@ -7,7 +7,55 @@
   currAuthStep="{{currAuthStep}}"
   bind:gotoUserEditPage="gotoUserEditPage"
 />
+
+<view class="stat-wrapper">
+  <view class="stat-item">
+    <view class="stat">{{following}}</view>
+    <view >关注</view>
+  </view>
+  <view class="stat-item">
+    <view class="stat">{{follower}}</view>
+    <view >粉丝</view>
+  </view>
+  <view class="stat-item">
+    <view class="stat">{{save}}</view>
+    <view >收藏</view>
+  </view>
+</view>
+
 <view class="content-wrapper">
+  <view class="item">
+    <view >
+      <t-icon prefix="wr" name="star_filled" size="45rpx" color="#999999" />
+    </view>
+    <view class="title">我的收藏</view>
+  </view>
+  <view class="item">
+    <t-icon prefix="wr" name="goods_exchange" size="45rpx" color="#999999" />
+    <view class="title">我的物品</view>
+  </view>
+  <view class="item">
+    <t-icon name="search" size="45rpx" color="#999999" />
+    <view class="title">正在寻找</view>
+  </view>
+  <view class="divider-line" />
+  <view class="item">
+    <t-icon name="edit" size="45rpx" color="#999999" />
+    <view class="title">提供反馈</view>
+  </view>
+  <view class="item">
+    <t-icon name="service" size="45rpx" color="#999999" />
+    <view class="title">客服中心</view>
+  </view>
+  <view class="item">
+    <t-icon prefix="wr" name="info" size="45rpx" color="#999999" />
+    <view class="title">关于刀刀</view>
+  </view>
+</view>
+
+
+
+<!-- <view class="content-wrapper">
   <view class="order-group-wrapper">
     <t-order-group orderTagInfos="{{orderTagInfos}}" bind:onClickTop="jumpAllOrder" bind:onClickItem="jumpNav" />
   </view>
@@ -32,9 +80,10 @@
       </t-cell>
     </t-cell-group>
   </view>
-</view>
+</view> -->
+
 <view class="footer__version" wx:if="{{versionNo !== ''}}">当前版本 {{versionNo}}</view>
-<t-popup visible="{{showMakePhone}}" placement="bottom" bind:visible-change="closeMakePhone" data-index="2">
+<!-- <t-popup visible="{{showMakePhone}}" placement="bottom" bind:visible-change="closeMakePhone" data-index="2">
   <view class="popup-content">
     <view class="popup-title border-bottom-1px" wx:if="{{customerServiceInfo.serviceTimeDuration}}">
       服务时间: {{customerServiceInfo.serviceTimeDuration}}
@@ -44,4 +93,4 @@
     <view class="popup-close" bind:tap="closeMakePhone">取消</view>
   </view>
 </t-popup>
-<t-toast id="t-toast" />
+<t-toast id="t-toast" /> -->

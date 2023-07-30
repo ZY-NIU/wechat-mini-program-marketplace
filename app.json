@@ -3,9 +3,11 @@
     "pages/home/index",
     "pages/goods/details/index",
     "pages/goods/create/item/index",
+    "pages/goods/lists/index",
     "pages/selling/index",
     "pages/message/index",
-    "pages/usercenter/index"
+    "pages/usercenter/index",
+    "pages/usercenter/person-info/index"
   ],
   "tabBar": {
     "color": "#666666",
