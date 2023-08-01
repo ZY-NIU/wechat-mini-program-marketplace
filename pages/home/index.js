@@ -74,6 +74,10 @@ Page({
     this.init();
   },
 
+  onShow() {
+    this.getTabBar().init();
+  },
+
   onReachBottom() {
     if (this.data.goodsListLoadStatus === 0) {
       this.loadGoodsList();

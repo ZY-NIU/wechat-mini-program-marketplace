@@ -6,6 +6,10 @@ Page({
     isCreateTradePopupShow: false,
   },
 
+  onShow() {
+    this.getTabBar().init();
+  },
+
   createTrade(e) {
     this.setData({
       isCreateTradePopupShow: true,

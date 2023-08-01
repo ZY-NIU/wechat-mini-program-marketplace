@@ -11,35 +11,27 @@
     "pages/usercenter/person-info/index"
   ],
   "tabBar": {
+    "custom": true,
     "color": "#666666",
-    "selectedColor": "black",
+    "selectedColor": "#FF5F15",
     "backgroundColor": "#ffffff",
-    "position": "bottom",
     "borderStyle": "black",
     "list": [
       {
         "pagePath": "pages/home/index",
-        "text": "首页",
-        "iconPath": "icons/home.png",
-        "selectedIconPath": "icons/home_filled.png"
+        "text": "首页"
       },
       {
         "pagePath": "pages/selling/index",
-        "text": "出售",
-        "iconPath": "icons/home.png",
-        "selectedIconPath": "icons/home_filled.png"
+        "text": "出售"
       },
       {
         "pagePath": "pages/message/index",
-        "text": "消息",
-        "iconPath": "icons/home.png",
-        "selectedIconPath": "icons/home_filled.png"
+        "text": "消息"
       },
       {
         "pagePath": "pages/usercenter/index",
-        "text": "我的",
-        "iconPath": "icons/person.png",
-        "selectedIconPath": "icons/person_filled.png"
+        "text": "我的"
       }
     ]
   },
