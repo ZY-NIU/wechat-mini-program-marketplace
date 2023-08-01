@@ -6,6 +6,7 @@
     "pages/goods/lists/index",
     "pages/selling/index",
     "pages/message/index",
+    "pages/message/chat/index",
     "pages/usercenter/index",
     "pages/usercenter/person-info/index"
   ],

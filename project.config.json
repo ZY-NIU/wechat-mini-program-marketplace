@@ -87,7 +87,7 @@
         },
         {
           "name": "示例页-消息",
-          "pathName": "pages/message/index",
+          "pathName": "pages/message/chat/index",
           "query": "",
           "scene": null
         },

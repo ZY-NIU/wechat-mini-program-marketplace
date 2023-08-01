@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "",
+  "usingComponents": {
+    "t-image": "/components/webp-image/index",
+    "t-icon": "tdesign-miniprogram/icon/icon"
+  }
+}
