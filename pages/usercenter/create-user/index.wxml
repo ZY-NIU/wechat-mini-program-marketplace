@@ -1,0 +1,24 @@
+<form bindsubmit="submit" class="create-wrapper">
+  <view class="image-wrapper">
+    <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+       <image class="avatar" src="{{avatarUrl ? avatarUrl : defaultAvatarUrl}}"></image>
+    </button>
+  </view>
+
+  <view class="input-wrapper">
+    <input
+      maxlength="15"
+      type="nickname"
+      class="input"
+      name="name"
+      placeholder="昵称"
+      bindblur="updateName"
+    />
+  </view>
+
+  <view wx:if="{{ name && avatarUrl }}">
+    <button form-type="submit" class="save">保存</button>
+  </view>
+</form>
+
+

@@ -1,19 +1,17 @@
-const getDefaultData = () => ({
-  
-});
+import { defaultAvatarUrl, defaultName } from '../../config/constant';
+
+const app = getApp();
 
 Page({
   data: {
-    showMakePhone: false,
+    currAuth: 0,
     userInfo: {
-      avatarUrl: '',
-      nickName: '正在登录...',
-      phoneNumber: '',
+      avatarUrl: defaultAvatarUrl,
+      nickName: defaultName,
+      // gender: null,
     },
-    // menuData,
-    // orderTagInfos,
+
     customerServiceInfo: {},
-    currAuthStep: 1,
     showKefu: true,
     versionNo: '',
     following: 0,
@@ -22,6 +20,10 @@ Page({
   },
 
   onLoad() {
+    this.setData({
+      currAuth: app.globalData.currAuth,
+      userInfo: app.globalData.userInfo,
+    })
     this.getVersionInfo();
   },
 
@@ -37,6 +39,39 @@ Page({
   init() {
     this.fetUseriInfoHandle();
   },
+
+  gotoUserEditPage() {
+    wx.navigateTo({
+      url: '/pages/usercenter/create-user',
+    })
+    const { currAuth } = this.data;
+    if (currAuth === 0) {
+      // app.authUserInfo();
+      wx.getUserProfile({
+        desc: '完善用户信息',
+        success: res => {
+          this.setData({
+            userInfo: res.userInfo,
+            currAuth: 1,
+          })
+          
+        },
+        fail: res => {
+          this.currAuth = 1;
+        }
+      })
+    } else {
+      wx.navigateTo({ url: '/pages/usercenter/person-info/index' });
+    }
+  },
+
+  authHandle() {
+    
+  },
+
+
+
+
 
   fetUseriInfoHandle() {
     // fetchUserCenter().then(
@@ -132,29 +167,6 @@ Page({
 
   jumpAllOrder() {
     wx.navigateTo({ url: '/pages/order/order-list/index' });
-  },
-
-  openMakePhone() {
-    this.setData({ showMakePhone: true });
-  },
-
-  closeMakePhone() {
-    this.setData({ showMakePhone: false });
-  },
-
-  call() {
-    wx.makePhoneCall({
-      phoneNumber: this.data.customerServiceInfo.servicePhone,
-    });
-  },
-
-  gotoUserEditPage() {
-    const { currAuthStep } = this.data;
-    // if (currAuthStep === 2) {
-      wx.navigateTo({ url: '/pages/usercenter/person-info/index' });
-    // } else {
-    //   this.fetUseriInfoHandle();
-    // }
   },
 
   getVersionInfo() {

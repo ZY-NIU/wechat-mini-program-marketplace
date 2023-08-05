@@ -10,6 +10,7 @@ page view {
 
 .person-info__btn {
   width: 100%;
+  color: #fa550f;
   border: 2rpx solid #ddd;
   border-radius: 48rpx;
   padding: 18rpx 0;

@@ -1,17 +1,17 @@
 const AuthStepType = {
-  ONE: 1,
-  TWO: 2,
-  THREE: 3,
+  UNAUTH: 0,
+  AUTH: 1,
 };
 
 Component({
   options: {
     multipleSlots: true,
   },
+
   properties: {
     currAuthStep: {
       type: Number,
-      value: AuthStepType.ONE,
+      value: AuthStepType.LOGOUT,
     },
     userInfo: {
       type: Object,
@@ -22,11 +22,13 @@ Component({
       value: false,
     },
   },
+
   data: {
     defaultAvatarUrl:
       'https://cdn-we-retail.ym.tencent.com/miniapp/usercenter/icon-user-center-avatar@2x.png',
     AuthStepType,
   },
+
   methods: {
     gotoUserEditPage() {
       this.triggerEvent('gotoUserEditPage');

@@ -3,7 +3,7 @@
   "usingComponents": {
     "t-popup": "tdesign-miniprogram/popup/popup",
     "t-icon": "tdesign-miniprogram/icon/icon",
-    "t-user-center-card": "./components/user-center-card/index",
+    "user-center-card": "./components/user-center-card/index",
     "t-toast": "tdesign-miniprogram/toast/toast"
   },
   "enablePullDownRefresh": true
