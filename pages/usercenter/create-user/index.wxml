@@ -11,6 +11,7 @@
       type="nickname"
       class="input"
       name="name"
+      value="{{name}}"
       placeholder="昵称"
       bindblur="updateName"
     />

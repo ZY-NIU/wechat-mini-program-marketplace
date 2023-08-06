@@ -1,15 +1,15 @@
-import { defaultAvatarUrl, defaultName } from '../../config/constant';
 
 const app = getApp();
 
 Page({
   data: {
-    currAuth: 0,
     userInfo: {
-      avatarUrl: defaultAvatarUrl,
-      nickName: defaultName,
-      // gender: null,
+      currAuth: 0,
+      avatarUrl: null,
+      nickName: null,
     },
+
+    
 
     customerServiceInfo: {},
     showKefu: true,
@@ -21,10 +21,11 @@ Page({
 
   onLoad() {
     this.setData({
-      currAuth: app.globalData.currAuth,
       userInfo: app.globalData.userInfo,
-    })
+    });
     this.getVersionInfo();
+
+    app.setUserInfoSub(this.userInfoCallback);
   },
 
   onShow() {
@@ -40,29 +41,21 @@ Page({
     this.fetUseriInfoHandle();
   },
 
-  gotoUserEditPage() {
-    wx.navigateTo({
-      url: '/pages/usercenter/create-user',
+  userInfoCallback: function(value) {
+    this.setData({
+      userInfo: value,
     })
-    const { currAuth } = this.data;
-    if (currAuth === 0) {
-      // app.authUserInfo();
-      wx.getUserProfile({
-        desc: '完善用户信息',
-        success: res => {
-          this.setData({
-            userInfo: res.userInfo,
-            currAuth: 1,
-          })
-          
-        },
-        fail: res => {
-          this.currAuth = 1;
-        }
-      })
-    } else {
-      wx.navigateTo({ url: '/pages/usercenter/person-info/index' });
+  },
+
+  gotoUserEditPage() {
+    let user = {
+      avatar: this.data.userInfo.avatarUrl,
+      name: this.data.userInfo.nickName,
     }
+    user = JSON.stringify(user);
+    wx.navigateTo({
+      url: '/pages/usercenter/create-user/index?user=' + encodeURIComponent(user),
+    })
   },
 
   authHandle() {

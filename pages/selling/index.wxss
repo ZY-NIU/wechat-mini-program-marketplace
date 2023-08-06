@@ -15,12 +15,13 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-left: 10rpx;
 }
 
 .selling-wrap .selling-head .selling-avatar {
-  width: 64rpx;
-  height: 64rpx;
-  border-radius: 64rpx;
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 80rpx;
 }
 
 /* create trade */
@@ -33,7 +34,7 @@
   border-radius: 18rpx;
   border: 1px solid black;
   justify-content: center;
-  margin-left: 32rpx;
+  margin-left: 28rpx;
 }
 
 .create-trade .text{

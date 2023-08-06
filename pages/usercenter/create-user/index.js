@@ -10,6 +10,15 @@ Page({
     name: null,
   },
 
+  onLoad: function(options) {
+    let user = decodeURIComponent(options.user);
+    user = JSON.parse(user);
+    this.setData({
+      avatarUrl: user.avatar,
+      name: user.name,
+    })
+  },
+
   onChooseAvatar(e) {
     this.setData({
       avatarUrl: e.detail.avatarUrl

@@ -1,32 +1,17 @@
-const AuthStepType = {
-  UNAUTH: 0,
-  AUTH: 1,
-};
+import { defaultAvatarUrl, defaultName } from '../../../../config/constant';
 
 Component({
-  options: {
-    multipleSlots: true,
-  },
 
   properties: {
-    currAuthStep: {
-      type: Number,
-      value: AuthStepType.LOGOUT,
-    },
     userInfo: {
       type: Object,
       value: {},
     },
-    isNeedGetUserInfo: {
-      type: Boolean,
-      value: false,
-    },
   },
 
   data: {
-    defaultAvatarUrl:
-      'https://cdn-we-retail.ym.tencent.com/miniapp/usercenter/icon-user-center-avatar@2x.png',
-    AuthStepType,
+    defaultAvatarUrl: defaultAvatarUrl,
+    defaultName: defaultName,
   },
 
   methods: {

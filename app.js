@@ -3,11 +3,13 @@ import updateManager from './common/updateManager';
 App({
   globalData: {
     openid: null,
-    currAuth: 0,
     userInfo: {
+      currAuth: 0,
       avatarUrl: null,
       nickName: null,
     },
+
+    userInfoSub: [],
   },
 
   onLaunch: function () {
@@ -32,11 +34,6 @@ App({
       if (id) {
         this.globalData.openid = id;
       } else {
-        // get open id using api from cloud
-        wx.showLoading({
-          title: '登陆中',
-        });
-
         // get openid
         wx.cloud.callFunction({
           name: 'getOpenId',
@@ -47,10 +44,8 @@ App({
           } else {
 
           }
-          wx.hideLoading();
         }).catch((e) => {
           console.log("ERROR: Fail to get user id");
-          wx.hideLoading();
         });
       }
     } catch (e) {
@@ -63,7 +58,13 @@ App({
     var userInfo = wx.getStorageSync('userInfo');
     if (userInfo) {
       this.globalData.userInfo = userInfo;
-      this.globalData.currAuth = 1;
+      wx.cloud.downloadFile({
+        fileID: userInfo.avatarUrl, // file ID
+        success: res => {
+          this.globalData.userInfo.avatarUrl = res.tempFilePath;
+        },
+        fail: console.error
+      })
     } else {
       // get user info from cloud
       wx.cloud.database().collection('users')
@@ -75,7 +76,13 @@ App({
         if (res.data.length == 1) {
           this.globalData.userInfo = res.data[0].userInfo;
           wx.setStorageSync('userInfo', res.data[0].userInfo);
-          this.globalData.currAuth = 1;
+          wx.cloud.downloadFile({
+            fileID: res.data[0].userInfo.avatarUrl, // file ID
+            success: res => {
+              this.globalData.userInfo.avatarUrl = res.tempFilePath;
+            },
+            fail: console.error
+          })
         } else if (res.data.length > 1) {
           console.log("CRITICAL: Duplicate users");
         }
@@ -84,50 +91,69 @@ App({
   },
 
   setUserInfo: function(avatar, name) {
+    wx.cloud.uploadFile({
+      cloudPath: 'users/avatar/' + this.globalData.openid + '.jpeg', // the cloud path to upload
+      filePath: avatar, // temp file path of avatar
+      success: (res) => {
+        let cloudUserInfo = {
+          currAuth: 1,
+          avatarUrl: res.fileID,
+          nickName: name,
+        }
+
+        // update cloud userInfo
+        wx.cloud.database().collection('users')
+        .where({
+          _openid: this.globalData.openid
+        })
+        .get()
+        .then((res) => {
+          if (res.data.length == 0) {
+            wx.cloud.database().collection('users')
+            .add({
+              data: {
+                userInfo: cloudUserInfo
+              }
+            })
+          } else {
+            wx.cloud.database().collection('users')
+            .doc(res.data[0]._id)
+            .update({
+              data: {
+                userInfo: cloudUserInfo
+              }
+            })
+          }
+        })
+
+        // update local userInfo
+        wx.setStorageSync('userInfo', cloudUserInfo);
+      },
+      fail: console.error
+    })
+
+    let userInfo = {
+      currAuth: 1,
+      avatarUrl: avatar,
+      nickName: name,
+    }
+
     // update global userInfo
-    this.globalData.userInfo.avatarUrl = avatar;
-    this.globalData.userInfo.nickName = name;
+    this.globalData.userInfo = userInfo;
 
-    // update local userInfo
-    wx.setStorageSync('userInfo', this.globalData.userInfo)
-
-    // update cloud userInfo
-    wx.cloud.database().collection('users')
-    .where({
-      _openid: this.globalData.openid
-    })
-    .get()
-    .then((res) => {
-      if (res.data.length == 0) {
-        wx.cloud.database().collection('users')
-        .add({
-          data: {
-            userInfo: {
-              avatarUrl: avatar,
-              nickName: name,
-            }
-          }
-        })
-      } else {
-        wx.cloud.database().collection('users')
-        .doc(res.data[0]._id)
-        .update({
-          data: {
-            userInfo: {
-              avatarUrl: avatar,
-              nickName: name,
-            }
-          }
-        })
-      }
-      this.globalData.currAuth = 1;
-    })
+    this.globalData.userInfoSub.forEach(element => {
+      element(userInfo);
+    });
   },
 
-  createUserInfo() {
-    wx.navigateTo({
-      url: '/pages/usercenter/create-user',
-    })
+  setUserInfoSub: function(method) {
+    this.globalData.userInfoSub.push(method);
   },
+
+  // createUserInfo() {
+  //   wx.navigateTo({
+  //     url: '/pages/usercenter/create-user',
+  //   })
+  // },
 
 });

@@ -1,9 +1,5 @@
 <user-center-card
   userInfo="{{userInfo}}"
-  name-class="custom-name-class"
-  phone-class="custom-phone-class"
-  avatar-class="customer-avatar-class"
-  currAuthStep="{{currAuthStep}}"
   bind:gotoUserEditPage="gotoUserEditPage"
 />
 
