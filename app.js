@@ -7,6 +7,7 @@ App({
       currAuth: 0,
       avatarUrl: null,
       nickName: null,
+      cloudAvatarUrl: null,
     },
 
     userInfoSub: [],
@@ -59,7 +60,7 @@ App({
     if (userInfo) {
       this.globalData.userInfo = userInfo;
       wx.cloud.downloadFile({
-        fileID: userInfo.avatarUrl, // file ID
+        fileID: userInfo.cloudAvatarUrl, // file ID
         success: res => {
           this.globalData.userInfo.avatarUrl = res.tempFilePath;
         },
@@ -77,14 +78,14 @@ App({
           this.globalData.userInfo = res.data[0].userInfo;
           wx.setStorageSync('userInfo', res.data[0].userInfo);
           wx.cloud.downloadFile({
-            fileID: res.data[0].userInfo.avatarUrl, // file ID
+            fileID: res.data[0].userInfo.cloudAvatarUrl, // file ID
             success: res => {
               this.globalData.userInfo.avatarUrl = res.tempFilePath;
             },
             fail: console.error
           })
         } else if (res.data.length > 1) {
-          console.log("CRITICAL: Duplicate users");
+          console.error("CRITICAL: Duplicate users");
         }
       })
     }
@@ -92,12 +93,12 @@ App({
 
   setUserInfo: function(avatar, name) {
     wx.cloud.uploadFile({
-      cloudPath: 'users/avatar/' + this.globalData.openid + '.jpeg', // the cloud path to upload
+      cloudPath: `users/avatar/${this.globalData.openid}.${avatar.match(/\.(\w+)$/)[1]}`, // the cloud path to upload
       filePath: avatar, // temp file path of avatar
       success: (res) => {
         let cloudUserInfo = {
           currAuth: 1,
-          avatarUrl: res.fileID,
+          cloudAvatarUrl: res.fileID,
           nickName: name,
         }
 
@@ -112,7 +113,7 @@ App({
             wx.cloud.database().collection('users')
             .add({
               data: {
-                userInfo: cloudUserInfo
+                userInfo: cloudUserInfo,
               }
             })
           } else {
@@ -128,6 +129,7 @@ App({
 
         // update local userInfo
         wx.setStorageSync('userInfo', cloudUserInfo);
+        this.globalData.userInfo.cloudAvatarUrl = res.fileID;
       },
       fail: console.error
     })

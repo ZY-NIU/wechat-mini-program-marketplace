@@ -26,7 +26,7 @@
 
     <view class="item">
       <t-icon prefix="wr" name="succeed" size="45rpx" color="#999999" />
-      <view class="title">结束交易</view>
+      <view class="title">已完成</view>
     </view>
   </view>
 
@@ -62,3 +62,4 @@
     </view> -->
   </view>
 </t-popup>
+<t-toast id="t-toast" />

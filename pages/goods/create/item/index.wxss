@@ -50,13 +50,14 @@ page {
   vertical-align: top;
   position: relative;
   border-radius: 18rpx;
-  border: 1px solid #999999;
+  background-color: #F0F0F0;
 }
 
 .form-content .outer-title {
   font-size: 24rpx;
   padding-left: 16rpx;
   padding-bottom: 4rpx;
+  color: #666;
 }
 
 .form-content .placeholder {
@@ -68,7 +69,7 @@ page {
   display: flex;
   align-items: center;
   border-radius: 18rpx;
-  border: 1px solid #999999;
+  background-color: #F0F0F0;
   color: #666;
   padding-left: 30rpx;
   padding-right: 28rpx;
@@ -89,7 +90,7 @@ page {
   font-size: 30rpx;
   width: 82rpx;
   border-radius: 18rpx;
-  border: 1px solid #999999;
+  background-color: #F0F0F0;
   color: #666;
   padding-left: 22rpx;
   padding-right: 22rpx;
@@ -102,16 +103,12 @@ page {
   display: flex;
   align-items: center;
   border-radius: 18rpx;
-  border: 1px solid #999999;
+  background-color: #F0F0F0;
   color: #666;
   padding-left: 30rpx;
   padding-right: 28rpx;
   margin-left: 10rpx;
 }
-
-/* .form-content .content-input picker {
-  color: #BFBFBF;
-} */
 
 .form-content .content-select {
   display: flex;
@@ -138,11 +135,11 @@ page {
   display: flex;
   align-items: center;
   align-self: stretch;
-  color: #666;
   border-radius: 18rpx;
-  border: 1px solid black;
+  border: 1px solid #666;
+  background-color: #fff;
+  color: #666;
   justify-content: center;
-  height: 70rpx;
   margin-top: 30rpx;
 }
 

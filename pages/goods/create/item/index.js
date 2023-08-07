@@ -1,28 +1,53 @@
 import Toast from 'tdesign-miniprogram/toast/index';
 
-const innerPhoneReg = '^1(?:3\\d|4[4-9]|5[0-35-9]|6[67]|7[0-8]|8\\d|9\\d)\\d{8}$';
-const innerNameReg = '^[a-zA-Z\\d\\u4e00-\\u9fa5]+$';
-const labelsOptions = [
-  { id: 0, name: '家' },
-  { id: 1, name: '公司' },
-];
+const app = getApp();
 
 Page({
+  // TODO: check message and images legal
+  data: {
+    imagesPath: [],
+    cloudImagesPath: [],
+    addImages: true,
+    titleFocus: false,
+    priceFocus: false,
+    descriptionFocus: false,
+    priceSignIndex: 0,
+    priceSignArray: ['CAD$', 'CNY¥'],
+    condIndex: 4,
+    condArray: ['全新', '二手 · 99新', '二手 · 微瑕', '二手 · 良好', '二手'],
+    locationIndex: 0,
+    locationArray: ['Waterloo'],
+
+    submitTitle: "发布",
+  },
+
+  onLoad(options) {
+    if (options.mode == 0) {
+      this.setData({
+        submitTitle: "保存",
+      })
+    } else {
+      this.setData({
+        submitTitle: "发布",
+      })
+    }
+  },
 
   uploadImages: function() {
     let a = this;
     wx.showActionSheet({
-        itemList: [ "从相册中选择", "拍照" ],
-        itemColor: "#666",
-        success: function(e) {
-          if (e.tapIndex == 0) {
-            a.chooseWxImage("album");
-          } else if (e.tapIndex == 1) {
-            a.chooseWxImage("camera");
-          }
+      itemList: [ "从相册中选择", "拍照" ],
+      itemColor: "#666",
+      success: function(e) {
+        if (e.tapIndex == 0) {
+          a.chooseWxImage("album");
+        } else if (e.tapIndex == 1) {
+          a.chooseWxImage("camera");
         }
+      }
     });
   },
+
   chooseWxImage: function(type) {
     let a = this;
     wx.chooseImage({
@@ -59,6 +84,7 @@ Page({
       }
     });
   },
+
   deleteImage: function(e) {
     var imgsPath = this.data.imagesPath;
     var index = e.currentTarget.dataset.index;
@@ -68,40 +94,8 @@ Page({
       addImages: true
     });
   },
-  uploadFiles: function(e) {
-    wx.showLoading({
-        title: "上传中"
-    });
-    wx.uploadFile({
-      url:url,
-      filePath: e,//图片路径
-      name: "user_avatar",
-      formData: {
-        token: a.globalData.token,
-        user_avatar: "filePath"
-      },
-      header: {
-        "Content-Type": "multipart/form-data"
-      },
-      success: function(a) {
-        wx.hideLoading();
-        wx.showToast({
-          title: "上传成功",
-          icon: "success",
-          duration: 3000
-        });
-      },
-      fail: function(a) {
-        wx.hideLoading();
-        wx.showToast({
-          title: "上传失败",
-          icon: "none",
-          duration: 3000
-        });
-      }
-    });
-  },
 
+  // for showing info in wxml
   hasTitle(e) {
     if (e.detail.value.length > 0) {
       this.setData({
@@ -145,367 +139,194 @@ Page({
       priceSignIndex: e.detail.value
     })
   },
-  changeLocation(e) {
-
+  bindLocationPickerChange: function(e) {
+    this.setData({
+      locationIndex: e.detail.value
+    })
   },
 
-  // options: {
-  //   multipleSlots: true,
-  // },
-  // externalClasses: ['theme-wrapper-class'],
-
-  data: {
-    imagesPath: [
-      'https://cdn-we-retail.ym.tencent.com/tsr/goods/nz-09a.png',
-      'https://cdn-we-retail.ym.tencent.com/tsr/goods/nz-09b.png',
-      'https://cdn-we-retail.ym.tencent.com/tsr/goods/nz-09a.png',
-      'https://cdn-we-retail.ym.tencent.com/tsr/goods/nz-09a.png',
-      'https://cdn-we-retail.ym.tencent.com/tsr/goods/nz-09b.png',
-      'https://cdn-we-retail.ym.tencent.com/tsr/goods/nz-09a.png'
-    ],
-    addImages: true,
-    titleFocus: false,
-    priceFocus: false,
-    descriptionFocus: false,
-    priceSignIndex: 0,
-    priceSignArray: ['CAD$', 'CNY¥'],
-    condIndex: 4,
-    condArray: ['全新', '二手 - 99新', '二手 - 微瑕', '二手 - 良好', '二手'],
-    location: "Waterloo",
-
-
-
-    locationState: {
-      labelIndex: null,
-      addressId: '',
-      addressTag: '',
-      cityCode: '',
-      cityName: '',
-      countryCode: '',
-      countryName: '',
-      detailAddress: '',
-      districtCode: '',
-      districtName: '',
-      isDefault: false,
-      name: '',
-      phone: '',
-      provinceCode: '',
-      provinceName: '',
-      isEdit: false,
-      isOrderDetail: false,
-      isOrderSure: false,
-    },
-    labels: labelsOptions,
-    areaPickerVisible: false,
-    submitActive: true,
-    visible: false,
-    labelValue: '',
-    columns: 3,
-  },
-  privateData: {
-    verifyTips: '',
-  },
-  onLoad(options) {
-    const { id } = options;
-    this.init(id);
-  },
-
-  onUnload() {
-    if (!this.hasSava) {
-      rejectAddress();
+  submit(e) {
+    var tmpPrice = e.detail.value.price ? Number(e.detail.value.price) : null
+    let item = {
+      userInfo: null,
+      title: e.detail.value.title,
+      priceSign: this.data.priceSignArray[this.data.priceSignIndex],
+      price: tmpPrice,
+      originPrice: tmpPrice,
+      description: e.detail.value.description,
+      attributes: [
+        {
+          attribute: "商品成色",
+          value: this.data.condArray[this.data.condIndex],
+        },
+      ],
+      location: this.data.locationArray[this.data.locationIndex],
+      deliver: e.detail.value.deliver,
     }
-  },
 
-  hasSava: false,
+    // priImg
 
-  init() {
-  },
-  getAddressDetail(id) {
-    fetchDeliveryAddress(id).then((detail) => {
-      this.setData({ locationState: detail }, () => {
-        const { isLegal, tips } = this.onVerifyInputLegal();
-        this.setData({
-          submitActive: isLegal,
-        });
-        this.privateData.verifyTips = tips;
+    if (this.itemValid(item)) {
+      var time = new Date();
+
+      var goodId = app.globalData.openid + '-' + time.toISOString().replace(/\D/g, '');
+      item.userInfo = {
+        name: app.globalData.userInfo.nickName,
+        avatarUrl: app.globalData.userInfo.cloudAvatarUrl,
+      }
+      item.time = time.toUTCString();
+
+      wx.showLoading({
+        title: '发布中',
       });
-    });
-  },
-  onInputValue(e) {
-    const { item } = e.currentTarget.dataset;
-    if (item === 'address') {
-      const { selectedOptions = [] } = e.detail;
-      this.setData(
-        {
-          'locationState.provinceCode': selectedOptions[0].value,
-          'locationState.provinceName': selectedOptions[0].label,
-          'locationState.cityName': selectedOptions[1].label,
-          'locationState.cityCode': selectedOptions[1].value,
-          'locationState.districtCode': selectedOptions[2].value,
-          'locationState.districtName': selectedOptions[2].label,
-          areaPickerVisible: false,
-        },
-        () => {
-          const { isLegal, tips } = this.onVerifyInputLegal();
-          this.setData({
-            submitActive: isLegal,
-          });
-          this.privateData.verifyTips = tips;
-        },
-      );
-    } else {
-      const { value = '' } = e.detail;
-      this.setData(
-        {
-          [`locationState.${item}`]: value,
-        },
-        () => {
-          const { isLegal, tips } = this.onVerifyInputLegal();
-          this.setData({
-            submitActive: isLegal,
-          });
-          this.privateData.verifyTips = tips;
-        },
-      );
+
+      (async () => {
+          await this.uploadImagesToCloud(goodId);
+
+          if (this.data.cloudImagesPath.length == 0) {
+            wx.hideLoading();
+            Toast({
+              context: this,
+              selector: '#t-toast',
+              message: '发布失败',
+              icon: 'close',
+              duration: 1000,
+            });
+            return
+          } else {
+            item.images = this.data.cloudImagesPath;
+            item.priImg = this.data.cloudImagesPath[0];
+
+            // update cloud good info
+            const db = wx.cloud.database();
+            const goodsDB = db.collection('goods');
+            goodsDB.where({
+              goodId: goodId
+            })
+            .get()
+            .then((res) => {
+              if (res.data.length == 0) {
+                goodsDB.add({
+                  data: {
+                    goodId: goodId,
+                    goodInfo: item
+                  }
+                })
+              } else {
+                goodsDB.where({
+                  goodId: res.data[0].goodId
+                })
+                .update({
+                  data: {
+                    goodInfo: item
+                  }
+                })
+              }
+            })
+
+            db.collection('users').where({
+              _openid: app.globalData.openid
+            })
+            .update({
+              data: {
+                goods: db.command.push([goodId])
+              }
+            })
+
+            // update local good info
+            let good =  {
+              priImg: item.priImg,
+              title: item.title,
+              price: item.price,
+              originPrice: item.originPrice,
+              priceSign: item.priceSign,
+            }
+            let goodList = wx.getStorageSync('myGoods');
+            if (goodList) {
+              wx.setStorageSync('myGoods', goodList.concat({
+                goodId: goodId,
+                good
+              }));
+            } else {
+              wx.setStorageSync('myGoods', [{
+                goodId: goodId,
+                good
+              }]);
+            }
+          
+            wx.hideLoading();
+            Toast({
+              context: this,
+              selector: '#t-toast',
+              message: '发布成功',
+              icon: 'check',
+              duration: 1000,
+            });
+            wx.navigateBack({ delta: 1 });
+          }
+      })();
     }
-  },
-  onPickArea() {
-    this.setData({ areaPickerVisible: true });
-  },
-  onPickLabels(e) {
-    const { item } = e.currentTarget.dataset;
-    const {
-      locationState: { labelIndex = undefined },
-      labels = [],
-    } = this.data;
-    let payload = {
-      labelIndex: item,
-      addressTag: labels[item].name,
-    };
-    if (item === labelIndex) {
-      payload = { labelIndex: null, addressTag: '' };
-    }
-    this.setData({
-      'locationState.labelIndex': payload.labelIndex,
-    });
-    this.triggerEvent('triggerUpdateValue', payload);
-  },
-  addLabels() {
-    this.setData({
-      visible: true,
-    });
-  },
-  confirmHandle() {
-    const { labels, labelValue } = this.data;
-    this.setData({
-      visible: false,
-      labels: [...labels, { id: labels[labels.length - 1].id + 1, name: labelValue }],
-      labelValue: '',
-    });
-  },
-  cancelHandle() {
-    this.setData({
-      visible: false,
-      labelValue: '',
-    });
-  },
-  onCheckDefaultAddress({ detail }) {
-    const { value } = detail;
-    this.setData({
-      'locationState.isDefault': value,
-    });
   },
 
-  onVerifyInputLegal() {
-    const { name, phone, detailAddress, districtName } = this.data.locationState;
-    const prefixPhoneReg = String(this.properties.phoneReg || innerPhoneReg);
-    const prefixNameReg = String(this.properties.nameReg || innerNameReg);
-    const nameRegExp = new RegExp(prefixNameReg);
-    const phoneRegExp = new RegExp(prefixPhoneReg);
+  uploadImagesToCloud: async function(id) {
+    var time = new Date();
+    var imgTime = time.toISOString().replace(/\D/g, '');
 
-    if (!name || !name.trim()) {
-      return {
-        isLegal: false,
-        tips: '请填写收货人',
-      };
+    for (var i = 0 ; i < this.data.imagesPath.length; ++i) {
+      var imgId = `${id}-${imgTime}-${i}`;
+      let fileId = await this.uploadImageToCloud(i, imgId);
+      this.setData({
+        cloudImagesPath: this.data.cloudImagesPath.concat(fileId)
+      })
     }
-    if (!nameRegExp.test(name)) {
-      return {
-        isLegal: false,
-        tips: '收货人仅支持输入中文、英文（区分大小写）、数字',
-      };
-    }
-    if (!phone || !phone.trim()) {
-      return {
-        isLegal: false,
-        tips: '请填写手机号',
-      };
-    }
-    if (!phoneRegExp.test(phone)) {
-      return {
-        isLegal: false,
-        tips: '请填写正确的手机号',
-      };
-    }
-    if (!districtName || !districtName.trim()) {
-      return {
-        isLegal: false,
-        tips: '请选择省市区信息',
-      };
-    }
-    if (!detailAddress || !detailAddress.trim()) {
-      return {
-        isLegal: false,
-        tips: '请完善详细地址',
-      };
-    }
-    if (detailAddress && detailAddress.trim().length > 50) {
-      return {
-        isLegal: false,
-        tips: '详细地址不能超过50个字符',
-      };
-    }
-    return {
-      isLegal: true,
-      tips: '添加成功',
-    };
   },
 
-  builtInSearch({ code, name }) {
+  uploadImageToCloud: function(i, id) {
+    let cloudPath = `goodImages/${id}.${this.data.imagesPath[i].match(/\.(\w+)$/)[1]}`;
+    let filePath = this.data.imagesPath[i];
     return new Promise((resolve, reject) => {
-      wx.getSetting({
-        success: (res) => {
-          if (res.authSetting[code] === false) {
-            wx.showModal({
-              title: `获取${name}失败`,
-              content: `获取${name}失败，请在【右上角】-小程序【设置】项中，将【${name}】开启。`,
-              confirmText: '去设置',
-              confirmColor: '#FA550F',
-              cancelColor: '取消',
-              success(res) {
-                if (res.confirm) {
-                  wx.openSetting({
-                    success(settinRes) {
-                      if (settinRes.authSetting[code] === true) {
-                        resolve();
-                      } else {
-                        console.warn('用户未打开权限', name, code);
-                        reject();
-                      }
-                    },
-                  });
-                } else {
-                  reject();
-                }
-              },
-              fail() {
-                reject();
-              },
-            });
-          } else {
-            resolve();
-          }
+      wx.cloud.uploadFile({
+        cloudPath: cloudPath,
+        filePath: filePath,
+        success: res => {
+          resolve(res.fileID);
         },
-        fail() {
-          reject();
-        },
-      });
-    });
+        fail: err => {
+          reject(err);
+        }
+      })
+    })
   },
 
-  onSearchAddress() {
-    this.builtInSearch({ code: 'scope.userLocation', name: '地址位置' }).then(() => {
-      wx.chooseLocation({
-        success: (res) => {
-          if (res.name) {
-            this.triggerEvent('addressParse', {
-              address: res.address,
-              name: res.name,
-              latitude: res.latitude,
-              longitude: res.longitude,
-            });
-          } else {
-            Toast({
-              context: this,
-              selector: '#t-toast',
-              message: '地点为空，请重新选择',
-              icon: '',
-              duration: 1000,
-            });
-          }
-        },
-        fail: function (res) {
-          console.warn(`wx.chooseLocation fail: ${JSON.stringify(res)}`);
-          if (res.errMsg !== 'chooseLocation:fail cancel') {
-            Toast({
-              context: this,
-              selector: '#t-toast',
-              message: '地点错误，请重新选择',
-              icon: '',
-              duration: 1000,
-            });
-          }
-        },
-      });
-    });
-  },
-  formSubmit() {
-    const { submitActive } = this.data;
-    if (!submitActive) {
+  itemValid: function(item) {
+    if (this.data.imagesPath.length < 1) {
       Toast({
         context: this,
         selector: '#t-toast',
-        message: this.privateData.verifyTips,
-        icon: '',
+        message: '* 至少一张照片哦',
         duration: 1000,
       });
-      return;
+      return false;
     }
-    const { locationState } = this.data;
-
-    this.hasSava = true;
-
-    resolveAddress({
-      saasId: '88888888',
-      uid: `88888888205500`,
-      authToken: null,
-      id: locationState.addressId,
-      addressId: locationState.addressId,
-      phone: locationState.phone,
-      name: locationState.name,
-      countryName: locationState.countryName,
-      countryCode: locationState.countryCode,
-      provinceName: locationState.provinceName,
-      provinceCode: locationState.provinceCode,
-      cityName: locationState.cityName,
-      cityCode: locationState.cityCode,
-      districtName: locationState.districtName,
-      districtCode: locationState.districtCode,
-      detailAddress: locationState.detailAddress,
-      isDefault: locationState.isDefault === 1 ? 1 : 0,
-      addressTag: locationState.addressTag,
-      latitude: locationState.latitude,
-      longitude: locationState.longitude,
-      storeId: null,
-    });
-
-    wx.navigateBack({ delta: 1 });
+    if (!item.title) {
+      Toast({
+        context: this,
+        selector: '#t-toast',
+        message: '* 起一个标题哦',
+        duration: 1000,
+      });
+      return false;
+    }
+    if (!item.price) {
+      Toast({
+        context: this,
+        selector: '#t-toast',
+        message: '* 添加下价格哦',
+        duration: 1000,
+      });
+      return false;
+    }
+    return true;
   },
 
-  getWeixinAddress(e) {
-    const { locationState } = this.data;
-    const weixinAddress = e.detail;
-    this.setData(
-      {
-        locationState: { ...locationState, ...weixinAddress },
-      },
-      () => {
-        const { isLegal, tips } = this.onVerifyInputLegal();
-        this.setData({
-          submitActive: isLegal,
-        });
-        this.privateData.verifyTips = tips;
-      },
-    );
-  },
 });

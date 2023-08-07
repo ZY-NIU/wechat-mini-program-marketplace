@@ -1,5 +1,5 @@
 <view class="create-item">
-  <form class="form-content">
+  <form bindsubmit="submit" class="form-content">
     <view class="input-wrap">
       <view class="outer-title"> 照片 </view>
       <!-- TODO: try show the right side of scroll view -->
@@ -60,7 +60,7 @@
         </picker>
         <view class="price-content-input">
           <input
-            maxlength="10"
+            maxlength="6"
             type="number"
             class="input"
             placeholder="价格"
@@ -105,21 +105,31 @@
 
     <view class="input-wrap">
       <view class="outer-title"> 地点 </view>
-      <view class="content-input" bind:tap="changeLocation">
-        <text class="input" name="location">{{location}}</text>
+      <view class="content-input">
+        <picker
+          mode="selector"
+          class="input"
+          value="{{locationIndex}}"
+          range="{{locationArray}}"
+          name="location"
+          bindchange="bindLocationPickerChange"
+        >
+          <view >{{locationArray[locationIndex]}}</view>
+        </picker>
       </view>
     </view>
 
     <view class="input-wrap">
       <view class="content-select">
         <label class="wrap">
-          <checkbox name="deliver" /> <text >支持送货上门</text>
+          <switch type="checkbox" name="deliver" color="#BFBFBF" /> <text >支持送货上门</text>
         </label>
       </view>
     </view>
 
-    <view class="submit" bindtap="formSubmit">
-      <view class="text">发布</view>
-    </view>
+    <button form-type="submit" class="submit">
+      <view class="text">{{submitTitle}}</view>
+    </button>
   </form>
 </view>
+<t-toast id="t-toast" />

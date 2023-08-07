@@ -1,3 +1,5 @@
+import Toast from 'tdesign-miniprogram/toast/index';
+
 import { defaultAvatarUrl } from '../../config/constant';
 
 const app = getApp();
@@ -61,7 +63,7 @@ Page({
 
   gotoCreateItemPage() {
     wx.navigateTo({
-      url: '/pages/goods/create/item/index',
+      url: '/pages/goods/create/item/index?mode=1',
     })
   },
 

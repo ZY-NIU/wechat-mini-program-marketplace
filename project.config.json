@@ -83,7 +83,7 @@
         {
           "name": "示例页-新建",
           "pathName": "pages/goods/create/item/index",
-          "query": "",
+          "query": "mode=1",
           "scene": null
         },
         {
