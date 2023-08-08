@@ -5,6 +5,7 @@
 }
 
 .goods-card__main {
+  flex: 1;
   display: flex;
   align-items: flex-start;
   /* height: 120rpx; */

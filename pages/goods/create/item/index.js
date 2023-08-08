@@ -148,6 +148,7 @@ Page({
   submit(e) {
     var tmpPrice = e.detail.value.price ? Number(e.detail.value.price) : null
     let item = {
+      onSale: true,
       userInfo: null,
       title: e.detail.value.title,
       priceSign: this.data.priceSignArray[this.data.priceSignIndex],
@@ -163,8 +164,6 @@ Page({
       location: this.data.locationArray[this.data.locationIndex],
       deliver: e.detail.value.deliver,
     }
-
-    // priImg
 
     if (this.itemValid(item)) {
       var time = new Date();
@@ -224,6 +223,7 @@ Page({
               }
             })
 
+            // update user's good list
             db.collection('users').where({
               _openid: app.globalData.openid
             })

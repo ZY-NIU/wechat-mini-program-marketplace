@@ -6,21 +6,14 @@ Component({
       type: Array,
       value: [],
     },
-    id: {
+    icon: {
       type: String,
       value: '',
-      observer: (id) => {
-        this.genIndependentID(id);
-      },
-    },
-    thresholds: {
-      type: Array,
-      value: [],
     },
   },
 
   data: {
-    independentID: '',
+    
   },
 
   lifetimes: {
@@ -35,28 +28,13 @@ Component({
       this.triggerEvent('click', { ...e.detail, index });
     },
 
-    onAddCart(e) {
+    onEditGoods(e) {
       const { index } = e.currentTarget.dataset;
-      this.triggerEvent('addcart', { ...e.detail, index });
-    },
-
-    onClickGoodsThumb(e) {
-      const { index } = e.currentTarget.dataset;
-      this.triggerEvent('thumb', { ...e.detail, index });
+      this.triggerEvent('edit', { ...e.detail, index });
     },
 
     init() {
-      this.genIndependentID(this.id || '');
-    },
 
-    genIndependentID(id) {
-      if (id) {
-        this.setData({ independentID: id });
-      } else {
-        this.setData({
-          independentID: `goods-list-${~~(Math.random() * 10 ** 8)}`,
-        });
-      }
-    },
+    }
   },
 });

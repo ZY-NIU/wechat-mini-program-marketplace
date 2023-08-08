@@ -76,7 +76,7 @@
         },
         {
           "name": "示例页-商品列表",
-          "pathName": "pages/goods/lists/index",
+          "pathName": "pages/selling/my-goods/index",
           "query": "",
           "scene": null
         },

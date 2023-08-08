@@ -1,15 +1,13 @@
-<view class="goods-list-wrap wr-class" id="{{independentID}}">
+<view class="goods-list-wrap wr-class">
 	<block wx:for="{{goodsList}}" wx:for-item="item" wx:key="index">
 		<goods-short-card
-		  id="{{independentID}}-gd-{{index}}"
+		  id="{{item.id}}"
 		  data="{{item}}"
-		  currency="{{item.currency || '$'}}"
-		  thresholds="{{thresholds}}"
 		  class="goods-card-inside"
 		  data-index="{{index}}"
-		  bind:thumb="onClickGoodsThumb"
+			icon="{{icon}}"
 		  bind:click="onClickGoods"
-		  bind:edit="onAddCart"
+		  bind:edit="onEditGoods"
 		/>
 	</block>
 </view>

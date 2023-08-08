@@ -1,0 +1,41 @@
+<view class="top-wrap">
+  <view class="top-bar">
+    <view class="create-trade" bindtap="gotoCreateItemPage">
+      <t-icon prefix="wr" name="add_circle" size="39rpx" weight="100"></t-icon>
+      <view class="text">新建交易</view>
+    </view>
+
+    <view class="share"><t-icon prefix="wr" name="share" size="60rpx" /></view>
+  </view>
+</view>
+
+<view class="list-container ">
+  <goods-short-list
+    wr-class="goods-list-container"
+    goodsList="{{goodsList}}"
+    icon="edit"
+    bind:click="goodListClickHandle"
+    bind:edit="editGoods"
+  />
+</view>
+
+<t-popup visible="{{isEditPopupShow}}" placement="bottom" bind:visible-change="handlePopupHide">
+  <view class="popup-container">
+    <view class="item" bind:tap="gotoCreateItemPage">
+      <t-icon name="edit" size="48rpx" ></t-icon>
+      <view class="text">编辑物品</view>
+    </view>
+    <view class="item">
+      <t-icon name="rollback" size="48rpx" ></t-icon>
+      <view class="text">调整价格</view>
+    </view>
+    <view class="item">
+      <t-icon name="check-circle" size="48rpx" ></t-icon>
+      <view class="text">物品已出售</view>
+    </view>
+    <view class="item">
+      <t-icon prefix="wr" name="share" size="48rpx" ></t-icon>
+      <view class="text">分享物品</view>
+    </view>
+  </view>
+</t-popup>

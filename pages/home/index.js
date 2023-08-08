@@ -6,18 +6,18 @@ Page({
         text: '推荐',
         key: 0,
       },
-      {
-        text: '闲置',
-        key: 1,
-      },
-      {
-        text: '租房',
-        key: 2,
-      },
-      {
-        text: '顺风车',
-        key: 3,
-      },
+      // {
+      //   text: '闲置',
+      //   key: 1,
+      // },
+      // {
+      //   text: '租房',
+      //   key: 2,
+      // },
+      // {
+      //   text: '顺风车',
+      //   key: 3,
+      // },
     ],
     location: "滑铁卢",
     goodsList: [

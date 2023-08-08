@@ -49,8 +49,8 @@ Page({
 
   gotoUserEditPage() {
     let user = {
-      avatar: this.data.userInfo.avatarUrl,
-      name: this.data.userInfo.nickName,
+      avatar: app.globalData.userInfo.avatarUrl,
+      name: app.globalData.userInfo.nickName,
     }
     user = JSON.stringify(user);
     wx.navigateTo({

@@ -7,7 +7,7 @@ App({
       currAuth: 0,
       avatarUrl: null,
       nickName: null,
-      cloudAvatarUrl: null,
+      // cloudAvatarUrl: null,
     },
 
     userInfoSub: [],
@@ -59,13 +59,6 @@ App({
     var userInfo = wx.getStorageSync('userInfo');
     if (userInfo) {
       this.globalData.userInfo = userInfo;
-      wx.cloud.downloadFile({
-        fileID: userInfo.cloudAvatarUrl, // file ID
-        success: res => {
-          this.globalData.userInfo.avatarUrl = res.tempFilePath;
-        },
-        fail: console.error
-      })
     } else {
       // get user info from cloud
       wx.cloud.database().collection('users')
@@ -75,12 +68,21 @@ App({
       .get()
       .then((res) => {
         if (res.data.length == 1) {
-          this.globalData.userInfo = res.data[0].userInfo;
-          wx.setStorageSync('userInfo', res.data[0].userInfo);
+          this.globalData.userInfo = {
+            currAuth: res.data[0].userInfo.currAuth,
+            nickName: res.data[0].userInfo.nickName,
+          }
           wx.cloud.downloadFile({
             fileID: res.data[0].userInfo.cloudAvatarUrl, // file ID
             success: res => {
-              this.globalData.userInfo.avatarUrl = res.tempFilePath;
+              var fs = wx.getFileSystemManager();
+              fs.saveFile({
+                tempFilePath: res.tempFilePath, // 传入一个本地临时文件路径
+                success: res => {
+                  this.globalData.userInfo.avatarUrl = res.savedFilePath; // res.savedFilePath 为一个本地缓存文件路径
+                  wx.setStorageSync('userInfo', this.globalData.userInfo);
+                }
+              })
             },
             fail: console.error
           })
@@ -92,60 +94,98 @@ App({
   },
 
   setUserInfo: function(avatar, name) {
-    wx.cloud.uploadFile({
-      cloudPath: `users/avatar/${this.globalData.openid}.${avatar.match(/\.(\w+)$/)[1]}`, // the cloud path to upload
-      filePath: avatar, // temp file path of avatar
-      success: (res) => {
-        let cloudUserInfo = {
-          currAuth: 1,
-          cloudAvatarUrl: res.fileID,
-          nickName: name,
-        }
-
+    var fs = wx.getFileSystemManager();
+    var userInfo = wx.getStorageSync('userInfo');
+    if (userInfo) {
+      if (userInfo.avatarUrl == avatar && userInfo.nickName == name) {
+        this.globalData.userInfoSub.forEach(element => {
+          element(this.globalData.userInfo);
+        });
+        return
+      } else if (userInfo.avatarUrl == avatar) {
+        // update global userInfo
+        this.globalData.userInfo.nickName = name;
+        // update local userInfo
+        wx.setStorageSync('userInfo', this.globalData.userInfo);
         // update cloud userInfo
         wx.cloud.database().collection('users')
         .where({
           _openid: this.globalData.openid
         })
-        .get()
-        .then((res) => {
-          if (res.data.length == 0) {
-            wx.cloud.database().collection('users')
-            .add({
-              data: {
-                userInfo: cloudUserInfo,
-              }
-            })
-          } else {
-            wx.cloud.database().collection('users')
-            .doc(res.data[0]._id)
-            .update({
-              data: {
-                userInfo: cloudUserInfo
-              }
-            })
+        .update({
+          data: {
+            'userInfo.nickName': name
           }
         })
-
-        // update local userInfo
-        wx.setStorageSync('userInfo', cloudUserInfo);
-        this.globalData.userInfo.cloudAvatarUrl = res.fileID;
-      },
-      fail: console.error
-    })
-
-    let userInfo = {
-      currAuth: 1,
-      avatarUrl: avatar,
-      nickName: name,
+        this.globalData.userInfoSub.forEach(element => {
+          element(this.globalData.userInfo);
+        });
+        return
+      } else {
+        fs.removeSavedFile({
+          filePath: userInfo.avatarUrl
+        })
+      }
     }
 
-    // update global userInfo
-    this.globalData.userInfo = userInfo;
+    fs.saveFile({
+      tempFilePath: avatar, // 传入一个本地临时文件路径
+      success: res => {
+        let userInfo = {
+          currAuth: 1,
+          avatarUrl: res.savedFilePath,
+          nickName: name,
+        }
+        // update global userInfo
+        this.globalData.userInfo = userInfo;
+        // update local userInfo
+        wx.setStorageSync('userInfo', userInfo);
 
-    this.globalData.userInfoSub.forEach(element => {
-      element(userInfo);
-    });
+        this.globalData.userInfoSub.forEach(element => {
+          element(userInfo);
+        });
+
+        wx.cloud.uploadFile({
+          cloudPath: `users/avatar/${this.globalData.openid}.${avatar.match(/\.(\w+)$/)[1]}`, // the cloud path to upload
+          filePath: res.savedFilePath, // stored file path of avatar
+          success: (res) => {
+            let cloudUserInfo = {
+              currAuth: 1,
+              cloudAvatarUrl: res.fileID,
+              nickName: name,
+            }
+    
+            // update cloud userInfo
+            wx.cloud.database().collection('users')
+            .where({
+              _openid: this.globalData.openid
+            })
+            .get()
+            .then((res) => {
+              if (res.data.length == 0) {
+                wx.cloud.database().collection('users')
+                .add({
+                  data: {
+                    userInfo: cloudUserInfo,
+                  }
+                })
+              } else {
+                wx.cloud.database().collection('users')
+                .doc(res.data[0]._id)
+                .update({
+                  data: {
+                    userInfo: cloudUserInfo
+                  }
+                })
+              }
+            })
+    
+            // this.globalData.userInfo.cloudAvatarUrl = res.fileID;
+          },
+          fail: console.error
+        })
+      }
+    })
   },
 
   setUserInfoSub: function(method) {

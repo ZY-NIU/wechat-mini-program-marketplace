@@ -29,10 +29,10 @@
     <t-icon prefix="wr" name="goods_exchange" size="45rpx" color="#999999" />
     <view class="title">我的物品</view>
   </view>
-  <view class="item">
+  <!-- <view class="item">
     <t-icon name="search" size="45rpx" color="#999999" />
     <view class="title">正在寻找</view>
-  </view>
+  </view> -->
   <view class="divider-line" />
   <view class="item">
     <t-icon name="edit" size="45rpx" color="#999999" />

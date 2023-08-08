@@ -67,4 +67,10 @@ Page({
     })
   },
 
+  viewMyItems() {
+    wx.navigateTo({
+      url: '/pages/selling/my-goods/index',
+    })
+  }
+
 })

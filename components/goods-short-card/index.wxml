@@ -1,11 +1,10 @@
 <view
-  id="{{independentID}}"
+  id="{{id}}"
   class="goods-card"
-  bind:tap="clickHandle"
   data-goods="{{ goods }}"
 >
-	<view class="goods-card__main">
-		<view class="goods-card__thumb" bind:tap="clickThumbHandle">
+	<view class="goods-card__main" bind:tap="clickHandle">
+		<view class="goods-card__thumb" >
 			<t-image
 			  wx:if="{{ !!goods.priImg }}"
 			  t-class="goods-card__img"
@@ -41,14 +40,15 @@
       · 
     </view> -->
 	</view>
-  <view class="goods-card__like-container">
+
+  <view class="goods-card__like-container" >
     <t-icon
       class="goods-card__like"
       prefix="wr"
-      name="star"
-      id="{{independentID}}-like"
-      data-id="{{independentID}}"
-      catchtap="addLikeHandle"
+      name="{{icon}}"
+      id="{{id}}-like"
+      data-id="{{id}}"
+      catchtap="editHandle"
       size="52rpx"
       color="#333"
     />

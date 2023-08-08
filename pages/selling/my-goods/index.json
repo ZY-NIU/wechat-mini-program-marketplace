@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "我的物品",
+  "usingComponents": {
+    "t-image": "/components/webp-image/index",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-popup": "tdesign-miniprogram/popup/popup",
+    "goods-short-list": "/components/goods-short-list/index"
+  }
+}
