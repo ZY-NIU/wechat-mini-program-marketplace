@@ -7,7 +7,7 @@ App({
       currAuth: 0,
       avatarUrl: null,
       nickName: null,
-      // cloudAvatarUrl: null,
+      cloudAvatarUrl: null,
     },
 
     userInfoSub: [],
@@ -68,10 +68,7 @@ App({
       .get()
       .then((res) => {
         if (res.data.length == 1) {
-          this.globalData.userInfo = {
-            currAuth: res.data[0].userInfo.currAuth,
-            nickName: res.data[0].userInfo.nickName,
-          }
+          this.globalData.userInfo = res.data[0].userInfo;
           wx.cloud.downloadFile({
             fileID: res.data[0].userInfo.cloudAvatarUrl, // file ID
             success: res => {
@@ -136,19 +133,21 @@ App({
           avatarUrl: res.savedFilePath,
           nickName: name,
         }
-        // update global userInfo
-        this.globalData.userInfo = userInfo;
-        // update local userInfo
-        wx.setStorageSync('userInfo', userInfo);
-
-        this.globalData.userInfoSub.forEach(element => {
-          element(userInfo);
-        });
 
         wx.cloud.uploadFile({
           cloudPath: `users/avatar/${this.globalData.openid}.${avatar.match(/\.(\w+)$/)[1]}`, // the cloud path to upload
           filePath: res.savedFilePath, // stored file path of avatar
           success: (res) => {
+            userInfo.cloudAvatarUrl = res.fileID;
+            // update global userInfo
+            this.globalData.userInfo = userInfo;
+            // update local userInfo
+            wx.setStorageSync('userInfo', userInfo);
+
+            this.globalData.userInfoSub.forEach(element => {
+              element(userInfo);
+            });
+
             let cloudUserInfo = {
               currAuth: 1,
               cloudAvatarUrl: res.fileID,

@@ -25,7 +25,7 @@
     </view>
     <view class="title">我的收藏</view>
   </view>
-  <view class="item">
+  <view class="item" bindtap="viewMyItems">
     <t-icon prefix="wr" name="goods_exchange" size="45rpx" color="#999999" />
     <view class="title">我的物品</view>
   </view>
@@ -34,14 +34,14 @@
     <view class="title">正在寻找</view>
   </view> -->
   <view class="divider-line" />
-  <view class="item">
+  <button class="button-item" open-type="feedback">
     <t-icon name="edit" size="45rpx" color="#999999" />
     <view class="title">提供反馈</view>
-  </view>
-  <view class="item">
+  </button>
+  <button class="button-item" open-type="contact">
     <t-icon name="service" size="45rpx" color="#999999" />
     <view class="title">客服中心</view>
-  </view>
+  </button>
   <view class="item">
     <t-icon prefix="wr" name="info" size="45rpx" color="#999999" />
     <view class="title">关于刀刀</view>

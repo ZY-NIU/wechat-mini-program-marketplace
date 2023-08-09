@@ -1,5 +1,6 @@
 {
   "navigationBarTitleText": "我的物品",
+  "enablePullDownRefresh": true,
   "usingComponents": {
     "t-image": "/components/webp-image/index",
     "t-icon": "tdesign-miniprogram/icon/icon",

@@ -5,9 +5,9 @@
 >
 	<view class="goods-card__main" bind:tap="clickHandle">
 		<view class="goods-card__thumb" >
-			<t-image
+			<image
 			  wx:if="{{ !!goods.priImg }}"
-			  t-class="goods-card__img"
+			  class="goods-card__img"
 			  src="{{ goods.priImg }}"
 			  mode="aspectFill"
 			  lazy-load
@@ -27,7 +27,7 @@
           price="{{goods.price}}"
         />
         <price
-          wx:if="{{ goods.originPrice && isValidityLinePrice }}"
+          wx:if="{{ goods.originPrice && lowerPrice }}"
           wr-class="goods-card__origin-price"
           symbol-class="spec-for-symbol"
           symbol="{{currency}}"

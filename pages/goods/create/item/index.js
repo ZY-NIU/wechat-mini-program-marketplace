@@ -224,35 +224,73 @@ Page({
             })
 
             // update user's good list
-            db.collection('users').where({
-              _openid: app.globalData.openid
-            })
-            .update({
-              data: {
-                goods: db.command.push([goodId])
-              }
-            })
-
-            // update local good info
             let good =  {
+              goodId: goodId,
               priImg: item.priImg,
               title: item.title,
               price: item.price,
               originPrice: item.originPrice,
               priceSign: item.priceSign,
+              onSale: item.onSale,
             }
-            let goodList = wx.getStorageSync('myGoods');
-            if (goodList) {
-              wx.setStorageSync('myGoods', goodList.concat({
-                goodId: goodId,
-                good
-              }));
-            } else {
-              wx.setStorageSync('myGoods', [{
-                goodId: goodId,
-                good
-              }]);
-            }
+            const userGoodsDB = db.collection('user_goods_list');
+            userGoodsDB.where({
+              _openid: app.globalData.openid
+            })
+            .get()
+            .then((res) => {
+              if (res.data.length == 0) {
+                userGoodsDB.add({
+                  data: {
+                    avatarUrl: app.globalData.cloudAvatarUrl,
+                    nickName: app.globalData.nickName,
+                    goods: [good],
+                  }
+                })
+              } else {
+                userGoodsDB.where({
+                  _openid: app.globalData.openid,
+                })
+                .update({
+                  data: {
+                    'goods': db.command.push([good])
+                  }
+                })
+                // userGoodsDB.where({
+                //   _openid: app.globalData.openid,
+                //   'goods.goodId': db.command.eq(goodId)
+                // })
+                // .update({
+                //   data: {
+                //     'goods.$': db.command.set(good)
+                //   }
+                // })
+              }
+            })
+
+            // update local good info
+            // let good =  {
+            //   priImg: item.priImg,
+            //   title: item.title,
+            //   price: item.price,
+            //   originPrice: item.originPrice,
+            //   priceSign: item.priceSign,
+            // }
+            // let goodList = wx.getStorageSync('myGoods');
+            // if (goodList) {
+            //   wx.setStorageSync('myGoods', goodList.concat({
+            //     goodId: goodId,
+            //     good
+            //   }));
+            // } else {
+            //   // TODO: check if there are some in the cloud
+            //   // if there are: pull and concate
+            //   // if not: first item, then create new list
+            //   wx.setStorageSync('myGoods', [{
+            //     goodId: goodId,
+            //     good
+            //   }]);
+            // }
           
             wx.hideLoading();
             Toast({
