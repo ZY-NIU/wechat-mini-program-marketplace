@@ -104,3 +104,7 @@
   /* line-height: 36rpx; */
 }
 
+.goods-card__save {
+  /* padding-bottom: 3rpx; */
+}
+

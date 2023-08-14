@@ -1,37 +1,97 @@
+import Toast from 'tdesign-miniprogram/toast/index';
+
 const app = getApp();
 
 Page({
 
   data: {
-    goodsList: [
-      {
-        id: 1,
-        title: '白色短袖连衣裙发撒的发撒地方阿斯顿发送到发送的发',
-        price: 34,
-        originPrice: 35,
-        priImg: app.globalData.cloudAvatarUrl,
-        priceSign: "CAD$"
-      }
-    ],
+    goodsList: [],
+    goodsListLoadStatus: 0,
+
+    pageSize: 10,
+    pageIdx: 0,
 
     isEditPopupShow: false,
+
+    curGoodId: null,
+  },
+
+  onLoad() {
+    this.init();
+  },
+
+  onShow() {
+    this.setData({
+      pageIdx: 0,
+    })
+    this.init();
   },
 
   init() {
+    wx.stopPullDownRefresh();
+    this.loadGoodsList(true);
+  },
+
+  onReachBottom() {
+    if (this.data.goodsListLoadStatus === 0) {
+      this.loadGoodsList();
+    }
+  },
+
+  onReTry() {
     this.loadGoodsList();
   },
 
-  loadGoodsList() {
-    const userGoodsDB = wx.cloud.database().collection('user_goods_list');
-    userGoodsDB.where({
-      _openid: app.globalData.openid
-    })
-    .get()
-    .then((res) => {
-      this.setData({
-        goodsList: res.data[0].goods
+  async loadGoodsList(fresh = false) {
+    if (fresh) {
+      wx.pageScrollTo({
+        scrollTop: 0,
+      });
+    }
+
+    this.setData({ goodsListLoadStatus: 1 });
+
+    const pageSize = this.data.pageSize;
+    const pageIdx = this.data.pageIdx;
+
+    try {
+      const db = wx.cloud.database();
+      await db.collection('goods')
+      .where({
+        _openid: app.globalData.openid
       })
-    })
+      .orderBy('time', 'desc')
+      .skip(pageIdx * pageSize)
+      .limit(pageSize)
+      .field({
+        _id: true,
+        'goodInfo.priImg': true,
+        'goodInfo.priceSign': true,
+        'goodInfo.originPrice': true,
+        'goodInfo.price': true,
+        'goodInfo.title': true,
+      })
+      .get()
+      .then((res) => {
+        if (res.data.length == 0) {
+          this.setData({ 
+            goodsListLoadStatus: 2,
+            pageIdx: 0,
+          });
+        } else {
+          this.setData({
+            goodsList: fresh ? res.data : this.data.goodsList.concat(res.data),
+            goodsListLoadStatus: 0,
+            pageIdx: this.data.pageIdx + 1
+          });
+        }
+      }).catch((e) => {
+        console.log("ERROR: Fail to get items");
+      });
+
+    } catch (err) {
+      this.setData({ goodsListLoadStatus: 3 });
+    }
   },
 
   gotoCreateItemPage() {
@@ -41,13 +101,57 @@ Page({
   },
 
   goodListClickHandle: function(e) {
-    console.log(e)
+    wx.navigateTo({
+      url: '/pages/goods/details/index?id=' + e.detail._id,
+    })
   },
 
   editGoods: function(e) {
+    console.log(e)
     this.setData({
       isEditPopupShow: true,
+      curGoodId: e.detail._id,
     });
+  },
+
+  editGoodPage() {
+    wx.navigateTo({
+      url: '/pages/goods/create/item/index?mode=0&id=' + this.data.curGoodId,
+    })
+  },
+
+  async itemSold() {
+    if (this.data.curGoodId) {
+      const db = wx.cloud.database();
+      await db.collection('goods')
+      .doc(this.data.curGoodId)
+      .remove({
+        success: res => {
+          this.setData({
+            isEditPopupShow: false,
+          });
+          Toast({
+            context: this,
+            selector: '#t-toast',
+            message: '恭喜售出',
+            icon: 'check',
+            duration: 1000,
+          });
+        },
+        fail: res => {
+          this.setData({
+            isEditPopupShow: false,
+          });
+          Toast({
+            context: this,
+            selector: '#t-toast',
+            message: '操作失败',
+            icon: 'close',
+            duration: 1000,
+          });
+        }
+      })
+    }
   },
 
   handlePopupHide() {
@@ -56,25 +160,12 @@ Page({
     });
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-
-  },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady() {
 
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-    this.loadGoodsList();
   },
 
   /**

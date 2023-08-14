@@ -13,7 +13,7 @@ Component({
   },
 
   data: {
-    
+
   },
 
   lifetimes: {
@@ -24,13 +24,11 @@ Component({
 
   methods: {
     onClickGoods(e) {
-      const { index } = e.currentTarget.dataset;
-      this.triggerEvent('click', { ...e.detail, index });
+      this.triggerEvent('click', { ...e.detail.good });
     },
 
     onEditGoods(e) {
-      const { index } = e.currentTarget.dataset;
-      this.triggerEvent('edit', { ...e.detail, index });
+      this.triggerEvent('edit', { ...e.detail.good });
     },
 
     init() {

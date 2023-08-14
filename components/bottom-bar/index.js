@@ -1,19 +1,55 @@
 Component({
   externalClasses: ['wr-class'],
 
-  data: { },
+  data: {
+    myGood: null,
+    hasIcon: null,
+    saved: null,
+  },
+
+  properties: {
+    myGood: {
+      type: Boolean,
+      observer(myGood) {
+        this.setData({ myGood });
+      },
+    },
+    hasRightIcon: {
+      type: Boolean,
+      observer(hasRightIcon) {
+        this.setData({ hasIcon: hasRightIcon });
+      },
+    },
+    saved: {
+      type: Boolean,
+      observer(saved) {
+        this.setData({ saved });
+      },
+    },
+  },
 
   methods: {
-    toChat() {
-      this.triggerEvent('toChat');
+    tapOne() {
+      if (this.data.myGood) {
+        this.triggerEvent('toEdit');
+      } else {
+        this.triggerEvent('toChat');
+      }
     },
 
-    toShare(e) {
+    tapTwo(e) {
       this.triggerEvent('toShare', e);
     },
 
-    toSave(e) {
-
+    tapThree(e) {
+      if (this.data.myGood) {
+        this.triggerEvent('toComplete');
+      } else {
+        this.setData({
+          saved: !this.data.saved,
+        })
+        this.triggerEvent('toSave', { saved: this.data.saved });
+      }
     },
   },
 });

@@ -1,15 +1,29 @@
-<view class="footer-cont">
+<view wx:if="{{myGood}}" class="footer-cont">
   <view class="flex-row">
-    <view bindtap="toChat">
-      <t-icon name="chat" size="50rpx" />
+    <view bindtap="tapOne">
+      <t-icon name="edit" size="50rpx" />
     </view>
-    <view class="flex-row-padding" bindtap="toShare">
+    <view class="flex-row-padding" bindtap="tapTwo">
       <t-icon prefix="wr" name="share" size="50rpx" />
     </view>
   </view>
 
-  <view class="flex-row" bindtap="toSave">
-    <t-icon prefix="wr"  name="star" size="50rpx" />
+  <view class="flex-row" bindtap="tapThree">
+    <t-icon name="check-circle" size="50rpx" />
   </view>
-		
+</view>
+<view wx:else class="footer-cont">
+  <view class="flex-row">
+    <view bindtap="tapOne">
+      <t-icon name="chat" size="50rpx" />
+    </view>
+    <view class="flex-row-padding" bindtap="tapTwo">
+      <t-icon prefix="wr" name="share" size="50rpx" />
+    </view>
+  </view>
+
+  <view wx:if="{{ hasIcon }}" class="flex-row" bindtap="tapThree">
+    <t-icon wx:if="{{ saved }}" prefix="wr" name="star_filled" color="#FFD700" size="50rpx" />
+    <t-icon wx:else prefix="wr" name="star" size="50rpx" />
+  </view>
 </view>

@@ -10,11 +10,11 @@
     list="{{details.images}}"
   ></t-swiper>
 
-  <view class="goods-info">
-    <view class="goods-title">
-      <view class="goods-name">{{details.title}}</view>
-    </view>
+  <view class="goods-title">
+    <view class="goods-name">{{details.title}}</view>
+  </view>
 
+  <view class="goods-info">
     <view class="goods-price">
       <price
         wx:if="{{ details.price }}"
@@ -35,7 +35,7 @@
 
     <text class="goods-intro">{{details.description}}</text>
 
-    <view class="attribute-row" wx:for="{{ details.attributes }}" wx:for-item="attribute">
+    <view class="attribute-row" wx:for="{{ details.attributes }}" wx:for-item="attribute" wx:key="index">
       <view class="attribute-name">{{attribute.attribute}}</view>
       <view class="attribute-value">{{attribute.value}}</view>
     </view>
@@ -44,17 +44,21 @@
   <view class="seller-wrap">
     <view class="seller-title">卖家信息</view>
     <view class="seller-bar">
-      <view class="seller-head">
-        <t-image src="{{userHeadUrl}}" t-class="seller-avatar" />
+      <view class="seller-head" bindtap="toSellerInfo">
+        <image src="{{details.userInfo.avatarUrl}}" class="seller-avatar" />
         <view class="seller-head-right">
-          <view class="seller-username">{{userName}}</view>
+          <view class="seller-username">{{details.userInfo.name}}</view>
         </view>
       </view>
-      <view class="chat"><t-icon name="chat" size="50rpx" /></view>
+      <!-- <view class="chat"><t-icon name="chat" size="50rpx" /></view> -->
+      <view wx:if="{{myGood === false}}" class="seller-follow" bindtap="followSeller">
+        <text wx:if="{{isfollowing}}">已关注</text>
+        <text wx:else>关注</text>
+      </view>
     </view>
 
-    <view class="location-title">交易地址</view>
-    <view wx:if="{{ details.meetup.public }}" class="location-preference">
+    <!-- <view class="location-title">交易地址</view> -->
+    <!-- <view wx:if="{{ details.meetup.public }}" class="location-preference">
       <view ><t-icon prefix="wr" name="group" size="40rpx" /></view>
       <view class="text">公共场所交易</view>
     </view>
@@ -65,13 +69,21 @@
     <view wx:elif="{{ details.meetup.pickup }}" class="location-preference">
       <view ><t-icon name="home" size="40rpx" /></view>
       <view class="text">自提</view>
-    </view>
-    <view wx:elif="{{ details.meetup.deliver }}" class="location-preference">
-      <view ><t-icon name="home" size="40rpx" /></view>
-      <view class="text">可送货</view>
+    </view> -->
+
+    <view class="location-wrap">
+      <view class="location-preference" >
+        <view ><t-icon prefix="wr" name="location" size="40rpx" /></view>
+        <view class="text">{{details.location}}</view>
+      </view>
+      
+      <view wx:if="{{ details.deliver }}" class="location-preference">
+        <view ><t-icon prefix="wr" name="deliver" size="40rpx" /></view>
+        <view class="text">可送货</view>
+      </view>
     </view>
 
-    <view class="show-map-container">
+    <!-- <view class="show-map-container">
       <map
         class="map"
         enable-overlooking="true"
@@ -81,16 +93,28 @@
         radius="320"
         fillColor="000"
       ></map>
-    </view>
+    </view> -->
 
   </view>
 </view>
 
 <view class="goods-bottom-operation">
   <bottom-bar
-    bind:toSendMessage="toChat"
+    wx:if="{{myGood === true}}"
+    myGood="{{myGood}}"
+    bind:toEdit="toEdit"
+    bind:toShare="toShare"
+    bind:toComplete="toComplete"
+    hasRightIcon="{{true}}"
+  />
+  <bottom-bar
+    wx:elif="{{myGood === false}}"
+    myGood="{{myGood}}"
+    bind:toChat="toChat"
     bind:toShare="toShare"
     bind:toSave="toSave"
+    hasRightIcon="{{true}}"
+    saved="{{saved}}"
   />
 </view>
 <t-toast id="t-toast" />

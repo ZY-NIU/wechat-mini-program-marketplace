@@ -9,8 +9,9 @@
     "pages/message/index",
     "pages/message/chat/index",
     "pages/usercenter/index",
-    "pages/usercenter/person-info/index",
-    "pages/usercenter/create-user/index"
+    "pages/usercenter/create-user/index",
+    "pages/usercenter/my-save/index",
+    "pages/usercenter/my-following/index"
   ],
   "tabBar": {
     "custom": true,

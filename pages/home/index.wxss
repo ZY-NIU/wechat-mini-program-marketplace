@@ -18,6 +18,7 @@ page {
   display: block;
   background: #fff;
   padding: 0 24rpx;
+  margin-bottom: 40rpx;
 }
 
 .home-page-header .t-search__input-container {

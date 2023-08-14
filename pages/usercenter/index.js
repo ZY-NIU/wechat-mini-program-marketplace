@@ -62,6 +62,17 @@ Page({
     
   },
 
+  viewMySave() {
+    wx.navigateTo({
+      url: '/pages/usercenter/my-save/index',
+    })
+  },
+
+  viewMyFollowing() {
+    wx.navigateTo({
+      url: '/pages/usercenter/my-following/index',
+    })
+  },
 
   viewMyItems() {
     wx.navigateTo({

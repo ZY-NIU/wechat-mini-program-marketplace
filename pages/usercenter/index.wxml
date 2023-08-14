@@ -4,7 +4,7 @@
 />
 
 <view class="stat-wrapper">
-  <view class="stat-item">
+  <!-- <view class="stat-item">
     <view class="stat">{{following}}</view>
     <view >关注</view>
   </view>
@@ -15,15 +15,23 @@
   <view class="stat-item">
     <view class="stat">{{save}}</view>
     <view >收藏</view>
-  </view>
+  </view> -->
 </view>
 
+
+
 <view class="content-wrapper">
-  <view class="item">
+  <view class="item" bindtap="viewMySave">
     <view >
       <t-icon prefix="wr" name="star_filled" size="45rpx" color="#999999" />
     </view>
     <view class="title">我的收藏</view>
+  </view>
+  <view class="item" bindtap="viewMyFollowing">
+    <view >
+      <t-icon name="usergroup" size="45rpx" color="#999999" />
+    </view>
+    <view class="title">我的关注</view>
   </view>
   <view class="item" bindtap="viewMyItems">
     <t-icon prefix="wr" name="goods_exchange" size="45rpx" color="#999999" />

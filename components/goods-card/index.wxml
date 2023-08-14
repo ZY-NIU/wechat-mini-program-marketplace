@@ -1,15 +1,13 @@
 <view
-  id="{{independentID}}"
   class="goods-card"
-  bind:tap="clickHandle"
-  data-goods="{{ goods }}"
+  data-good="{{ good }}"
 >
-	<view class="goods-card__main">
-		<view class="goods-card__thumb" bind:tap="clickThumbHandle">
-			<t-image
-			  wx:if="{{ !!goods.priImg }}"
-			  t-class="goods-card__img"
-			  src="{{ goods.priImg }}"
+	<view class="goods-card__main" bind:tap="clickHandle">
+		<view class="goods-card__thumb" >
+			<image
+			  wx:if="{{ !!good.goodInfo.priImg }}"
+			  class="goods-card__img"
+			  src="{{ good.goodInfo.priImg }}"
 			  mode="aspectFill"
 			  lazy-load
 			/>
@@ -17,40 +15,50 @@
 		<view class="goods-card__body">
 			<view class="goods-price">
 				<price
-					wx:if="{{ goods.price }}"
+					wx:if="{{ good.goodInfo.price }}"
 					wr-class="spec-for-price"
 					symbol-class="spec-for-symbol"
 					symbol="{{currency}}"
-					price="{{goods.price}}"
+					price="{{good.goodInfo.price}}"
 				/>
 				<price
-					wx:if="{{ goods.originPrice && isValidityLinePrice }}"
+					wx:if="{{ good.goodInfo.originPrice && isValidityLinePrice }}"
 					wr-class="goods-card__origin-price"
 					symbol-class="spec-for-symbol"
 					symbol="{{currency}}"
-					price="{{goods.originPrice}}"
+					price="{{good.goodInfo.originPrice}}"
 					type="delthrough"
 				/>
 			</view>
 
-			<view wx:if="{{ goods.title }}" class="goods-dot">
+			<view wx:if="{{ good.goodInfo.title }}" class="goods-dot">
 				· 
 			</view>
 			
-			<view wx:if="{{ goods.title }}" class="goods-card__title">
-				{{ goods.title }}
+			<view wx:if="{{ good.goodInfo.title }}" class="goods-card__title">
+				{{ good.goodInfo.title }}
 			</view>
 
-			<view >
+			<view class="goods-card__save">
 				<t-icon
-					class="goods-card__like"
+					wx:if="{{ !good.saved }}"
 					prefix="wr"
 					name="star"
-					id="{{independentID}}-like"
-					data-id="{{independentID}}"
-					catchtap="addLikeHandle"
+					id="{{id}}-save"
+					data-id="{{id}}"
+					catchtap="saveHandle"
 					size="48rpx"
 					color="#333"
+				/>
+				<t-icon
+					wx:else
+					prefix="wr"
+					name="star_filled"
+					id="{{id}}-save"
+					data-id="{{id}}"
+					catchtap="saveHandle"
+					size="48rpx"
+					color="#FFD700"
 				/>
 			</view>
 		</view>

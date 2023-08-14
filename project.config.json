@@ -57,14 +57,8 @@
     "miniprogram": {
       "list": [
         {
-          "name": "首页入口",
+          "name": "首页",
           "pathName": "pages/home/index",
-          "query": "",
-          "scene": null
-        },
-        {
-          "name": "示例页-商品",
-          "pathName": "pages/goods/details/index",
           "query": "",
           "scene": null
         },
@@ -75,8 +69,14 @@
           "scene": null
         },
         {
-          "name": "示例页-商品列表",
+          "name": "示例页-我的商品",
           "pathName": "pages/selling/my-goods/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "示例页-商品列表",
+          "pathName": "pages/goods/lists/index",
           "query": "",
           "scene": null
         },
@@ -97,11 +97,6 @@
           "pathName": "pages/usercenter/index",
           "query": "",
           "scene": null
-        },
-        {
-          "name": "create user",
-          "pathName": "pages/usercenter/create-user/index",
-          "query": ""
         }
       ]
     }

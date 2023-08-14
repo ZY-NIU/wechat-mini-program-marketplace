@@ -31,9 +31,20 @@
         />
       </t-tabs>
     </view>
-    <view class="tabs-location" bind:change="locationChangeHandle">
+    <view class="tabs-location" >
       <view class="tabs-location-icon"><t-icon prefix="wr" name="location"/></view>
-      <view class="tabs-location-font">{{location}}</view>
+      <!-- <view class="tabs-location-font">{{location}}</view> -->
+      <view >
+        <picker
+          mode="selector"
+          value="{{locationIndex}}"
+          range="{{locationArray}}"
+          name="location"
+          bindchange="bindLocationPickerChange"
+        >
+          <view class="tabs-location-font">{{locationArray[locationIndex]}}</view>
+        </picker>
+      </view>
     </view>
   </view>
 </view>
@@ -47,7 +58,7 @@
     wr-class="goods-list-container"
     goodsList="{{goodsList}}"
     bind:click="goodListClickHandle"
-    bind:like="goodListLikeHandle"
+    bind:save="goodListSaveHandle"
   />
-  <!-- <load-more list-is-empty="{{!goodsList.length}}" status="{{goodsListLoadStatus}}" bind:retry="onReTry" /> -->
+  <load-more list-is-empty="{{!goodsList.length}}" status="{{goodsListLoadStatus}}" bind:retry="onReTry" />
 </view>

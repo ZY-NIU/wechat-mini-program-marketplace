@@ -1,13 +1,16 @@
 <view class="seller-wrap">
   <view class="seller-bar">
     <view class="seller-head">
-      <t-image src="{{userHeadUrl}}" t-class="seller-avatar" />
+      <image src="{{sellerAvatar}}" class="seller-avatar" />
       <view class="seller-head-right">
-        <view class="seller-username">{{userName}}</view>
+        <view class="seller-username">{{sellerName}}</view>
       </view>
     </view>
 
-    <view class="seller-follow">关注</view>
+    <view class="seller-follow" bindtap="followSeller" >
+      <text wx:if="{{isfollowing}}">已关注</text>
+      <text wx:else>关注</text>
+    </view>
   </view>
 </view>
 
@@ -15,14 +18,17 @@
   <goods-short-list
     wr-class="goods-list-container"
     goodsList="{{goodsList}}"
+    icon="star"
     bind:click="goodListClickHandle"
-    bind:like="goodListLikeHandle"
+    bind:edit="goodListSaveHandle"
   />
+  <load-more list-is-empty="{{!goodsList.length}}" status="{{goodsListLoadStatus}}" bind:retry="onReTry" />
 </view>
 <view class="goods-bottom-operation">
   <bottom-bar
-    bind:toSendMessage="toChat"
+    myGood="{{false}}"
+    bind:toChat="toChat"
     bind:toShare="toShare"
-    bind:toSave="toSave"
+    hasRightIcon="{{false}}"
   />
 </view>

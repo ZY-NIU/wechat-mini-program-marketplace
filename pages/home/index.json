@@ -9,6 +9,7 @@
     "t-search": "tdesign-miniprogram/search/search",
     "t-tabs": "tdesign-miniprogram/tabs/tabs",
     "t-tab-panel": "tdesign-miniprogram/tab-panel/tab-panel",
-    "t-icon": "tdesign-miniprogram/icon/icon"
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "load-more": "/components/load-more/index"
   }
 }

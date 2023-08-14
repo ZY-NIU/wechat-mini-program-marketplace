@@ -36,7 +36,7 @@
 }
 
 .goods-card__title {
-  font-size: 28rpx;
+  font-size: 30rpx;
   color: #333;
   white-space: normal;
   text-overflow: ellipsis;

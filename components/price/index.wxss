@@ -47,6 +47,7 @@
     color: inherit;
     font-size: inherit;
     font-size: 27rpx;
+    padding-right: 3rpx;
   }
   .pprice {
     display: inline;

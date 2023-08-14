@@ -5,7 +5,7 @@
       <!-- TODO: try show the right side of scroll view -->
       <scroll-view scroll-x="true" enable-flex class="image-container">
         <image 
-          wx:for="{{imagesPath}}"
+          wx:for="{{cloudImagesPath}}"
           wx:for-item="item"
           wx:key="index"
           class="image"

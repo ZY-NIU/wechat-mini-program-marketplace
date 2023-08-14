@@ -17,14 +17,14 @@ Component({
         if (!data) {
           return;
         }
-        let isValidityLinePrice = true;
-        if (data.originPrice && data.price && data.originPrice < data.price) {
-          isValidityLinePrice = false;
+        let lowerPrice = false;
+        // if (data.originPrice && data.price && data.originPrice < data.price) {
+        //   lowerPrice = true;
+        // }
+        if (data.goodInfo.priceSign) {
+          var currency = data.goodInfo.priceSign[data.goodInfo.priceSign.length - 1];
         }
-        if (data.priceSign) {
-          var currency = data.priceSign[data.priceSign.length - 1];
-        }
-        this.setData({ goods: data, isValidityLinePrice, currency });
+        this.setData({ good: data, lowerPrice, currency });
       },
     },
     icon: {
@@ -38,9 +38,9 @@ Component({
 
   data: {
     id: '',
-    goods: { id: '' },
+    good: { id: '' },
     currency: '$',
-    isValidityLinePrice: false,
+    lowerPrice: false,
     icon: 'star',
   },
 
@@ -54,22 +54,16 @@ Component({
 
   methods: {
     clickHandle() {
-      this.triggerEvent('click', { goods: this.data.goods });
+      this.triggerEvent('click', { good: this.data.good });
     },
 
     editHandle() {
-      this.triggerEvent('edit', { goods: this.data.goods });
-    },
-
-    addLikeHandle(e) {
-      const { id } = e.currentTarget;
-      const { id: cardID } = e.currentTarget.dataset;
-      this.triggerEvent('add-like', {
-        ...e.detail,
-        id,
-        cardID,
-        goods: this.data.goods,
-      });
+      if (this.data.icon === 'star') {
+        this.setData({
+          'good.saved': !this.data.good.saved,
+        })
+      }
+      this.triggerEvent('edit', { good: this.data.good });
     },
 
     init() {

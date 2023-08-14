@@ -5,7 +5,7 @@ const app = getApp();
 Page({
   // TODO: check message and images legal
   data: {
-    imagesPath: [],
+    // imagesPath: [],
     cloudImagesPath: [],
     addImages: true,
     titleFocus: false,
@@ -19,16 +19,36 @@ Page({
     locationArray: ['Waterloo'],
 
     submitTitle: "发布",
+    mode: 1,
   },
 
   onLoad(options) {
     if (options.mode == 0) {
       this.setData({
-        submitTitle: "保存",
+        mode: 0
+      })
+      const db = wx.cloud.database();
+      db.collection('goods')
+      .doc(options.id)
+      .get()
+      .then(res => {
+        if (res.data.goodInfo.images.length >= 9) {
+          this.setData({
+            addImages: false,
+          });
+        }
+
+        console.log(res.data)
+
+        this.setData({
+          cloudImagesPath: res.data.goodInfo.images,
+          condIndex: this.data.condArray.indexOf(res.data.goodInfo.attributes[0].value),
+          priceSignIndex: this.data.priceSignArray.indexOf(res.data.goodInfo.priceSign)
+        })
       })
     } else {
       this.setData({
-        submitTitle: "发布",
+        mode: 1
       })
     }
   },
@@ -53,8 +73,8 @@ Page({
     wx.chooseImage({
       sizeType: [ "compressed" ],
       sourceType: [ type ],
-      count: 9 - a.data.imagesPath.length,
-      success: function(e) {
+      count: 9 - a.data.cloudImagesPath.length,
+      success: e => {
         var imageOk = true;
         for (var i = 0; i < e.tempFiles.length; i++) {
           if (e.tempFiles[i].size > 2097152) {
@@ -71,11 +91,9 @@ Page({
         }
         
         if (imageOk) {
-          a.setData({
-            imagesPath: a.data.imagesPath.concat(e.tempFilePaths),
-          });
+          a.uploadImagesToCloud(e.tempFilePaths);
 
-          if (a.data.imagesPath.length >= 9) {
+          if (a.data.cloudImagesPath.length >= 9) {
             a.setData({
               addImages: false,
             });
@@ -85,12 +103,56 @@ Page({
     });
   },
 
+  uploadImagesToCloud: async function(paths) {
+    wx.showLoading({
+      title: '上传图片',
+    });
+
+    var time = new Date();
+    var imgTime = time.toISOString().replace(/\D/g, '');
+
+    let id = app.globalData.openid;
+
+    for (var i = 0 ; i < paths.length; ++i) {
+      var imgId = `${id}-${imgTime}-${i}`;
+      let fileId = await this.uploadImageToCloud(paths[i], imgId);
+      this.setData({
+        cloudImagesPath: this.data.cloudImagesPath.concat(fileId)
+      })
+    }
+    wx.hideLoading();
+  },
+
+  uploadImageToCloud: function(path, id) {
+    let cloudPath = `goodImages/${id}.${path.match(/\.(\w+)$/)[1]}`;
+    let filePath = path;
+    return new Promise((resolve, reject) => {
+      wx.cloud.uploadFile({
+        cloudPath: cloudPath,
+        filePath: filePath,
+        success: res => {
+          resolve(res.fileID);
+        },
+        fail: err => {
+          reject(err);
+        }
+      })
+    })
+  },
+
   deleteImage: function(e) {
-    var imgsPath = this.data.imagesPath;
+    var imgsPath = this.data.cloudImagesPath;
     var index = e.currentTarget.dataset.index;
+    var deletePath = imgsPath[index];
+
+    wx.cloud.deleteFile({
+      fileList: [deletePath],
+      fail: console.error
+    })
+
     imgsPath.splice(index, 1);
     this.setData({
-      imagesPath: imgsPath,
+      cloudImagesPath: imgsPath,
       addImages: true
     });
   },
@@ -166,21 +228,22 @@ Page({
     }
 
     if (this.itemValid(item)) {
-      var time = new Date();
+      // var time = new Date();
 
-      var goodId = app.globalData.openid + '-' + time.toISOString().replace(/\D/g, '');
+      // var goodId = app.globalData.openid + '-' + time.toISOString().replace(/\D/g, '');
+      let avatar = app.globalData.userInfo.cloudAvatarUrl;
+      let name = app.globalData.userInfo.nickName;
       item.userInfo = {
-        name: app.globalData.userInfo.nickName,
-        avatarUrl: app.globalData.userInfo.cloudAvatarUrl,
+        name: name,
+        avatarUrl: avatar,
       }
-      item.time = time.toUTCString();
 
       wx.showLoading({
         title: '发布中',
       });
 
       (async () => {
-          await this.uploadImagesToCloud(goodId);
+          // await this.uploadImagesToCloud();
 
           if (this.data.cloudImagesPath.length == 0) {
             wx.hideLoading();
@@ -198,98 +261,51 @@ Page({
 
             // update cloud good info
             const db = wx.cloud.database();
-            const goodsDB = db.collection('goods');
-            goodsDB.where({
-              goodId: goodId
-            })
-            .get()
-            .then((res) => {
-              if (res.data.length == 0) {
-                goodsDB.add({
-                  data: {
-                    goodId: goodId,
-                    goodInfo: item
-                  }
-                })
-              } else {
-                goodsDB.where({
-                  goodId: res.data[0].goodId
-                })
-                .update({
-                  data: {
-                    goodInfo: item
-                  }
-                })
+            await db.collection('goods').add({
+              data: {
+                // goodId: goodId,
+                time: db.serverDate(),
+                goodInfo: item
               }
             })
+            // .then((res) => {
+            //   let goodId = res._id;
+            //   let userGoodsDB = db.collection('user_goods_list');
+            //   userGoodsDB.where({
+            //     _openid: app.globalData.openid
+            //   })
+            //   .get()
+            //   .then((res) => {
+            //     if (res.data.length == 0) {
+            //       userGoodsDB.add({
+            //         data: {
+            //           avatarUrl: avatar,
+            //           nickName: name,
+            //           goods: [goodId],
+            //         }
+            //       })
+            //     } else {
+            //       userGoodsDB.where({
+            //         _openid: app.globalData.openid,
+            //       })
+            //       .update({
+            //         data: {
+            //           goods: db.command.push([goodId])
+            //         }
+            //       })
+            //     }
+            //   })
+            // })
 
             // update user's good list
-            let good =  {
-              goodId: goodId,
-              priImg: item.priImg,
-              title: item.title,
-              price: item.price,
-              originPrice: item.originPrice,
-              priceSign: item.priceSign,
-              onSale: item.onSale,
-            }
-            const userGoodsDB = db.collection('user_goods_list');
-            userGoodsDB.where({
-              _openid: app.globalData.openid
-            })
-            .get()
-            .then((res) => {
-              if (res.data.length == 0) {
-                userGoodsDB.add({
-                  data: {
-                    avatarUrl: app.globalData.cloudAvatarUrl,
-                    nickName: app.globalData.nickName,
-                    goods: [good],
-                  }
-                })
-              } else {
-                userGoodsDB.where({
-                  _openid: app.globalData.openid,
-                })
-                .update({
-                  data: {
-                    'goods': db.command.push([good])
-                  }
-                })
-                // userGoodsDB.where({
-                //   _openid: app.globalData.openid,
-                //   'goods.goodId': db.command.eq(goodId)
-                // })
-                // .update({
-                //   data: {
-                //     'goods.$': db.command.set(good)
-                //   }
-                // })
-              }
-            })
-
-            // update local good info
             // let good =  {
+            //   goodId: goodId,
             //   priImg: item.priImg,
             //   title: item.title,
             //   price: item.price,
             //   originPrice: item.originPrice,
             //   priceSign: item.priceSign,
-            // }
-            // let goodList = wx.getStorageSync('myGoods');
-            // if (goodList) {
-            //   wx.setStorageSync('myGoods', goodList.concat({
-            //     goodId: goodId,
-            //     good
-            //   }));
-            // } else {
-            //   // TODO: check if there are some in the cloud
-            //   // if there are: pull and concate
-            //   // if not: first item, then create new list
-            //   wx.setStorageSync('myGoods', [{
-            //     goodId: goodId,
-            //     good
-            //   }]);
+            //   onSale: item.onSale,
             // }
           
             wx.hideLoading();
@@ -306,38 +322,8 @@ Page({
     }
   },
 
-  uploadImagesToCloud: async function(id) {
-    var time = new Date();
-    var imgTime = time.toISOString().replace(/\D/g, '');
-
-    for (var i = 0 ; i < this.data.imagesPath.length; ++i) {
-      var imgId = `${id}-${imgTime}-${i}`;
-      let fileId = await this.uploadImageToCloud(i, imgId);
-      this.setData({
-        cloudImagesPath: this.data.cloudImagesPath.concat(fileId)
-      })
-    }
-  },
-
-  uploadImageToCloud: function(i, id) {
-    let cloudPath = `goodImages/${id}.${this.data.imagesPath[i].match(/\.(\w+)$/)[1]}`;
-    let filePath = this.data.imagesPath[i];
-    return new Promise((resolve, reject) => {
-      wx.cloud.uploadFile({
-        cloudPath: cloudPath,
-        filePath: filePath,
-        success: res => {
-          resolve(res.fileID);
-        },
-        fail: err => {
-          reject(err);
-        }
-      })
-    })
-  },
-
   itemValid: function(item) {
-    if (this.data.imagesPath.length < 1) {
+    if (this.data.cloudImagesPath.length < 1) {
       Toast({
         context: this,
         selector: '#t-toast',

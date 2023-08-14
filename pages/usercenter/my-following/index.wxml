@@ -1,0 +1,29 @@
+<view wx:if="{{usersList.length==0}}" class='no-following'>
+快去多多关注 ~
+</view>
+
+<view class="users-list-wrap wr-class">
+	<block wx:for="{{usersList}}" wx:for-item="item" wx:key="index" wx:for-index="idx">
+
+		<view class="user-list">
+      <view class="left">
+        <!-- avatar and username and message -->
+        <view class="flex-row" bindtap="userClickHandle" data-index="{{idx}}">
+          <view class="user-head">
+            <image src="{{item.cloudAvatarUrl}}" class="user-avatar" />
+          </view>
+          <view class="user-details">
+            <view class="user-name">{{item.nickName}}</view>
+          </view>
+        </view>
+
+        <view class="seller-follow" bindtap="unfollowSeller" data-index="{{idx}}">
+          <text wx:if="{{item.isfollowing}}" style="color: #FF0000">取消关注</text>
+          <text wx:else>关注</text>
+        </view>
+      </view>
+    </view>
+
+	</block>
+</view>
+

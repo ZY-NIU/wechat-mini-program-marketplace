@@ -1,0 +1,13 @@
+<view wx:if="{{goodsList.length==0}}" class='no-save'>
+快去逛逛 ~
+</view>
+
+<view class="list-container">
+  <goods-short-list
+    wr-class="goods-list-container"
+    goodsList="{{goodsList}}"
+    icon="star"
+    bind:click="goodListClickHandle"
+    bind:edit="goodListSaveHandle"
+  />
+</view>

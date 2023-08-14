@@ -1,7 +1,7 @@
 <view class="goods-list-wrap wr-class">
 	<block wx:for="{{goodsList}}" wx:for-item="item" wx:key="index">
 		<goods-short-card
-		  id="{{item.goodId}}"
+		  id="{{item._id}}"
 		  data="{{item}}"
 		  class="goods-card-inside"
 		  data-index="{{index}}"
