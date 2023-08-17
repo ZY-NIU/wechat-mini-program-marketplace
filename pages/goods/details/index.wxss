@@ -1,6 +1,7 @@
 @import '../../../style/global.wxss';
 page {
   width: 100vw;
+  background-color: #fff;
 }
 
 .goods-detail-page {
@@ -206,4 +207,36 @@ page {
 
 .t-toast__content {
   z-index: 12000 !important;
+}
+
+/* popup container */
+.popup-container {
+  background-color: #ffffff;
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 16rpx;
+  padding-left: 32rpx;
+  padding-right: 32rpx;
+  padding-top: 20rpx;
+  padding-bottom: 30rpx;
+}
+
+.popup-container .item {
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  padding: 20rpx 28rpx;
+}
+
+.popup-container .item .text {
+  margin-left: 24rpx;
+}
+
+.no-goods {
+  width: 100%;
+  text-align: center;
+  font-size: 28rpx;
+  color: #666;
+  background-color: #fff;
+  padding-top: 200rpx;
 }

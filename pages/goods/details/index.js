@@ -4,7 +4,6 @@ Page({
 
   data: {
     lowerPrice: false,
-
     currency: "$",
 
     navigation: { type: 'fraction' },
@@ -16,6 +15,10 @@ Page({
     myGood: null,
     isfollowing: false,
     saved: null,
+
+    isCompletePopupShow: false,
+
+    onSold: true,
   },
 
   onLoad(options) {
@@ -26,40 +29,51 @@ Page({
 
   loadGood(id) {
     wx.cloud.database().collection('goods')
-    .where({
-      _id: id
-    })
-    .get()
-    .then(res => {
-      if (res.data[0]._openid == app.globalData.openid) {
+    .doc(id)
+    .get({
+      success: res => {
+        if (res.data._openid == app.globalData.openid) {
+          this.setData({
+            myGood: true,
+          })
+        } else {
+          let saveList = wx.getStorageSync('saveList');
+          let followingList = wx.getStorageSync('followingList');
+          this.setData({
+            myGood: false,
+            saved: saveList.includes(res.data._id),
+            isfollowing: followingList.includes(res.data._openid),
+          });
+        }
+  
+        let lowerPrice = false;
+        let good = res.data.goodInfo;
+        if (good.originPrice && good.price && good.originPrice < good.price) {
+          lowerPrice = true;
+        }
+        if (good.priceSign) {
+          var currency = good.priceSign[good.priceSign.length - 1];
+        }
         this.setData({
-          myGood: true,
-        })
-      } else {
-        let saveList = wx.getStorageSync('saveList');
-        let followingList = wx.getStorageSync('followingList');
-        this.setData({
-          myGood: false,
-          saved: saveList.includes(res.data[0]._id),
-          isfollowing: followingList.includes(res.data[0]._openid),
+          details: good,
+          id: res.data._id,
+          sellerId: res.data._openid,
+          lowerPrice,
+          currency
         });
+      },
+      fail: err => {
+        this.setData({
+          onSold: false
+        })
       }
+    })
+  },
 
-      let lowerPrice = false;
-      let good = res.data[0].goodInfo;
-      if (good.originPrice && good.price && good.originPrice < good.price) {
-        lowerPrice = true;
-      }
-      if (good.priceSign) {
-        var currency = good.priceSign[good.priceSign.length - 1];
-      }
-      this.setData({
-        details: good,
-        id: res.data[0]._id,
-        sellerId: res.data[0]._openid,
-        lowerPrice,
-        currency
-      });
+  previewImg(e) {
+    wx.previewImage({
+      current: this.data.details.images[e.detail.index],
+      urls: this.data.details.images
     })
   },
 
@@ -91,7 +105,9 @@ Page({
   },
 
   toChat() {
-    console.log('chat')
+    wx.navigateTo({
+      url: '/pages/message/chat/index?id=' + this.data.sellerId,
+    })
   },
 
   toShare() {
@@ -134,10 +150,69 @@ Page({
   },
 
   toEdit() {
-    console.log('edit')
+    wx.navigateTo({
+      url: '/pages/goods/create/item/index?mode=0&id=' + this.data.id,
+    })
   },
 
   toComplete() {
-    console.log('complete')
-  }
+    this.setData({
+      isCompletePopupShow: true,
+    });
+  },
+
+  async itemSold() {
+    if (this.data.id) {
+      this.setData({
+        isCompletePopupShow: false,
+      });
+
+      const db = wx.cloud.database();
+      await db.collection('goods')
+      .doc(this.data.id)
+      .field({
+        'goodInfo.images': true,
+      })
+      .get({
+        success: res => {
+          wx.cloud.deleteFile({
+            fileList: res.data.goodInfo.images,
+            fail: console.error
+          })
+        }
+      })
+
+      await db.collection('goods')
+      .doc(this.data.id)
+      .remove({
+        success: res => {
+          Toast({
+            context: this,
+            selector: '#t-toast',
+            message: '恭喜售出',
+            icon: 'check',
+            duration: 1000,
+          });
+          
+        },
+        fail: err => {
+          Toast({
+            context: this,
+            selector: '#t-toast',
+            message: '操作失败',
+            icon: 'close',
+            duration: 1000,
+          });
+        }
+      })
+
+      wx.navigateBack({ delta: 1 });
+    }
+  },
+
+  handlePopupHide() {
+    this.setData({
+      isCompletePopupShow: false,
+    });
+  },
 })

@@ -1,16 +1,18 @@
-<view wx:if="{{messages.length==0}}" class='no-message'>
+<view wx:if="{{chatList.length==0}}" class='no-message'>
 快去找找喜欢的物品 ~
 </view>
 
 <view wx:else>
-  <block wx:for="{{messages}}">
+  <block wx:for="{{chatList}}">
     <view class="user-list">
       <view class="left" bindtap="startChat" data-index="{{index}}">
+
         <!-- avatar and username and message -->
         <view class="flex-row">
           <view class="user-head">
             <t-image src="{{item.userAvatar}}" t-class="user-avatar" />
           </view>
+
           <view class="user-details">
             <view class="user-name">{{item.username}}</view>
             <view class="msg">{{item.record[item.record.length-1].text}}</view>
@@ -19,6 +21,7 @@
 
         <!-- time -->
         <view class="time">{{item.record[item.record.length-1].time}}</view>
+
       </view>
     </view>
   </block>

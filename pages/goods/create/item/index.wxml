@@ -11,6 +11,7 @@
           class="image"
           src="{{item}}"
           mode="aspectFill"
+          bind:tap="previewImg"
         >
           <t-icon
             class="delete-image"
@@ -18,7 +19,7 @@
             color="#666"
             name="close"
             data-index="{{index}}"
-            bindtap="deleteImage"></t-icon>
+            bindtap="deleteImage"/>
         </image>
 
         <view wx:if="{{addImages}}" class="image-add" bindtap="uploadImages">
@@ -35,6 +36,7 @@
         <textarea
           maxlength="80"
           class="input"
+          value="{{title}}"
           placeholder="标题"
           placeholder-class="placeholder"
           auto-height="{{true}}"
@@ -63,6 +65,7 @@
             maxlength="6"
             type="number"
             class="input"
+            value="{{price}}"
             placeholder="价格"
             placeholder-class="placeholder"
             name="price"
@@ -78,6 +81,7 @@
         <textarea
           maxlength="500"
           class="input"
+          value="{{description}}"
           placeholder="描述"
           placeholder-class="placeholder"
           auto-height="{{true}}"
@@ -122,13 +126,14 @@
     <view class="input-wrap">
       <view class="content-select">
         <label class="wrap">
-          <switch type="checkbox" name="deliver" color="#BFBFBF" /> <text >支持送货上门</text>
+          <switch type="checkbox" checked="{{delivery}}" name="deliver" color="#BFBFBF" /> <text >支持送货上门</text>
         </label>
       </view>
     </view>
 
     <button form-type="submit" class="submit">
-      <view class="text">{{submitTitle}}</view>
+      <view wx:if="{{mode}}" class="text">发布</view>
+      <view wx:else class="text">保存</view>
     </button>
   </form>
 </view>

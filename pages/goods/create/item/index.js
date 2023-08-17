@@ -6,45 +6,60 @@ Page({
   // TODO: check message and images legal
   data: {
     // imagesPath: [],
+    id: null,
     cloudImagesPath: [],
-    addImages: true,
-    titleFocus: false,
-    priceFocus: false,
-    descriptionFocus: false,
+    title: null,
+    price: null,
+    description: null,
     priceSignIndex: 0,
     priceSignArray: ['CAD$', 'CNY¥'],
     condIndex: 4,
     condArray: ['全新', '二手 · 99新', '二手 · 微瑕', '二手 · 良好', '二手'],
     locationIndex: 0,
-    locationArray: ['Waterloo'],
+    locationArray: ['Waterloo', 'Toronto'],
+    delivery: false,
 
-    submitTitle: "发布",
     mode: 1,
+    addImages: true,
+    titleFocus: false,
+    priceFocus: false,
+    descriptionFocus: false,
   },
 
   onLoad(options) {
     if (options.mode == 0) {
-      this.setData({
-        mode: 0
-      })
       const db = wx.cloud.database();
       db.collection('goods')
       .doc(options.id)
-      .get()
-      .then(res => {
-        if (res.data.goodInfo.images.length >= 9) {
+      .get({
+        success: res => {
+          if (res.data.goodInfo.images.length >= 9) {
+            this.setData({
+              addImages: false,
+            });
+          }
+  
           this.setData({
-            addImages: false,
-          });
+            mode: 0,
+            id: options.id,
+            cloudImagesPath: res.data.goodInfo.images,
+            title: res.data.goodInfo.title,
+            titleFocus: res.data.goodInfo.title !== '',
+            price: res.data.goodInfo.price,
+            priceFocus: res.data.goodInfo.price !== '',
+            description: res.data.goodInfo.description,
+            descriptionFocus: res.data.goodInfo.description !== '',
+            condIndex: this.data.condArray.indexOf(res.data.goodInfo.attributes[0].value),
+            priceSignIndex: this.data.priceSignArray.indexOf(res.data.goodInfo.priceSign),
+            locationIndex: this.data.locationArray.indexOf(res.data.goodInfo.location),
+            delivery: res.data.goodInfo.deliver
+          })
+        },
+        fail: res => {
+          this.setData({
+            mode: 1
+          })
         }
-
-        console.log(res.data)
-
-        this.setData({
-          cloudImagesPath: res.data.goodInfo.images,
-          condIndex: this.data.condArray.indexOf(res.data.goodInfo.attributes[0].value),
-          priceSignIndex: this.data.priceSignArray.indexOf(res.data.goodInfo.priceSign)
-        })
       })
     } else {
       this.setData({
@@ -99,13 +114,16 @@ Page({
             });
           }
         }
+      },
+      fail: e => {
+        console.log(e)
       }
     });
   },
 
   uploadImagesToCloud: async function(paths) {
     wx.showLoading({
-      title: '上传图片',
+      title: '审核图片',
     });
 
     var time = new Date();
@@ -155,6 +173,13 @@ Page({
       cloudImagesPath: imgsPath,
       addImages: true
     });
+  },
+
+  previewImg(e) {
+    wx.previewImage({
+      current: this.data.cloudImagesPath[e.detail.index],
+      urls: this.data.cloudImagesPath
+    })
   },
 
   // for showing info in wxml
@@ -238,86 +263,57 @@ Page({
         avatarUrl: avatar,
       }
 
+      let message = this.data.mode ? '发布' : '保存';
       wx.showLoading({
-        title: '发布中',
+        title: message + '中',
       });
 
       (async () => {
-          // await this.uploadImagesToCloud();
+        // await this.uploadImagesToCloud();
 
-          if (this.data.cloudImagesPath.length == 0) {
-            wx.hideLoading();
-            Toast({
-              context: this,
-              selector: '#t-toast',
-              message: '发布失败',
-              icon: 'close',
-              duration: 1000,
-            });
-            return
-          } else {
-            item.images = this.data.cloudImagesPath;
-            item.priImg = this.data.cloudImagesPath[0];
+        if (this.data.cloudImagesPath.length == 0) {
+          wx.hideLoading();
+          Toast({
+            context: this,
+            selector: '#t-toast',
+            message: message + '失败',
+            icon: 'close',
+            duration: 1000,
+          });
+          return
+        } else {
+          item.images = this.data.cloudImagesPath;
+          item.priImg = this.data.cloudImagesPath[0];
 
-            // update cloud good info
-            const db = wx.cloud.database();
+          // upload to cloud
+          const db = wx.cloud.database();
+          if (this.data.mode) {
             await db.collection('goods').add({
               data: {
-                // goodId: goodId,
                 time: db.serverDate(),
                 goodInfo: item
               }
             })
-            // .then((res) => {
-            //   let goodId = res._id;
-            //   let userGoodsDB = db.collection('user_goods_list');
-            //   userGoodsDB.where({
-            //     _openid: app.globalData.openid
-            //   })
-            //   .get()
-            //   .then((res) => {
-            //     if (res.data.length == 0) {
-            //       userGoodsDB.add({
-            //         data: {
-            //           avatarUrl: avatar,
-            //           nickName: name,
-            //           goods: [goodId],
-            //         }
-            //       })
-            //     } else {
-            //       userGoodsDB.where({
-            //         _openid: app.globalData.openid,
-            //       })
-            //       .update({
-            //         data: {
-            //           goods: db.command.push([goodId])
-            //         }
-            //       })
-            //     }
-            //   })
-            // })
-
-            // update user's good list
-            // let good =  {
-            //   goodId: goodId,
-            //   priImg: item.priImg,
-            //   title: item.title,
-            //   price: item.price,
-            //   originPrice: item.originPrice,
-            //   priceSign: item.priceSign,
-            //   onSale: item.onSale,
-            // }
-          
-            wx.hideLoading();
-            Toast({
-              context: this,
-              selector: '#t-toast',
-              message: '发布成功',
-              icon: 'check',
-              duration: 1000,
-            });
-            wx.navigateBack({ delta: 1 });
+          } else {
+            await db.collection('goods').doc(this.data.id)
+            .update({
+              data: {
+                time: db.serverDate(),
+                goodInfo: item
+              }
+            })
           }
+        
+          wx.hideLoading();
+          Toast({
+            context: this,
+            selector: '#t-toast',
+            message: message + '成功',
+            icon: 'check',
+            duration: 1000,
+          });
+          wx.navigateBack({ delta: 1 });
+        }
       })();
     }
   },

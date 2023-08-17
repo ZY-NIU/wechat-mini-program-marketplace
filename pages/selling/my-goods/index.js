@@ -107,7 +107,6 @@ Page({
   },
 
   editGoods: function(e) {
-    console.log(e)
     this.setData({
       isEditPopupShow: true,
       curGoodId: e.detail._id,
@@ -123,6 +122,20 @@ Page({
   async itemSold() {
     if (this.data.curGoodId) {
       const db = wx.cloud.database();
+      await db.collection('goods')
+      .doc(this.data.curGoodId)
+      .field({
+        'goodInfo.images': true,
+      })
+      .get({
+        success: res => {
+          wx.cloud.deleteFile({
+            fileList: res.data.goodInfo.images,
+            fail: console.error
+          })
+        }
+      })
+
       await db.collection('goods')
       .doc(this.data.curGoodId)
       .remove({

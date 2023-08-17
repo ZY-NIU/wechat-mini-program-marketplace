@@ -4,6 +4,7 @@
     "pages/goods/details/index",
     "pages/goods/create/item/index",
     "pages/goods/lists/index",
+    "pages/goods/search/index",
     "pages/selling/index",
     "pages/selling/my-goods/index",
     "pages/message/index",

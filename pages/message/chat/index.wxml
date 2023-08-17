@@ -1,31 +1,114 @@
-<scroll-view scroll-y="true" scroll-into-view="toView" class='chat_content'>
-  <view wx:for="{{chatList}}">
-
+<scroll-view id='chatUI' scroll-y="true" scroll-into-view="{{toView}}" enable-back-to-top="true" upper-threshold="100" class='chat_content'>
+  <view wx:for="{{chatList}}" wx:for-item="item" wx:key="index">
+    <!-- other's messages -->
     <block wx:if="{{item.id==otherInfo.id}}">
-      <view class="other-wrapper">
+      <view wx:if="{{!item.textOnly}}" class="other-wrapper">
+
         <image class="avatar" src="{{otherInfo.avatar}}"></image>
         <view class="msg">
           <view class="text-time">
-            <text >{{item.time}}</text>
+            <text >{{item.sendTime}}</text>
           </view>
-          <view class="text">
-            <text >{{item.text}}</text>
+          <view wx:if="{{item.msgType === 'text'}}" class="text">
+            <text >{{item.msgContent}}</text>
+          </view>
+          <view wx:elif="{{item.msgType === 'image'}}">
+            <image
+              class="image"
+              src="{{item.msgContent}}"
+              mode="aspectFill"
+              bind:tap="previewImg"
+            ></image>
+          </view>
+          <view wx:elif="{{item.msgType === 'video'}}">
+            <video
+              class="image"
+              src="{{item.msgContent}}"
+              object-fit="cover"
+            ></video>
           </view>
         </view>
+
+      </view>
+      <view wx:else class="other-wrapper-content-only">
+
+        <view wx:if="{{item.msgType === 'text'}}" class="text">
+          <text >{{item.msgContent}}</text>
+        </view>
+        <view wx:elif="{{item.msgType === 'image'}}">
+          <image
+            class="image"
+            src="{{item.msgContent}}"
+            mode="aspectFill"
+            bind:tap="previewImg"
+            data-src="{{item.msgContent}}"
+            lazy-load="{{true}}"
+          ></image>
+        </view>
+        <view wx:elif="{{item.msgType === 'video'}}">
+          <video
+            class="image"
+            src="{{item.msgContent}}"
+            object-fit="cover"
+          ></video>
+        </view>
+
       </view>
     </block>
 
+    <!-- my messages -->
     <block wx:if="{{item.id==myInfo.id}}">
-      <view class="my-wrapper">
+      <view wx:if="{{!item.textOnly}}" class="my-wrapper">
+
         <view class="msg">
           <view class="text-time">
-            <text >{{item.time}}</text>
+            <text >{{item.sendTime}}</text>
           </view>
-          <view class="text">
-            <text >{{item.text}}</text>
+          <view wx:if="{{item.msgType === 'text'}}" class="text">
+            <text >{{item.msgContent}}</text>
+          </view>
+          <view wx:elif="{{item.msgType === 'image'}}">
+            <image
+              class="image"
+              src="{{item.msgContent}}"
+              mode="aspectFill"
+              bind:tap="previewImg"
+            ></image>
+          </view>
+          <view wx:elif="{{item.msgType === 'video'}}">
+            <video
+              class="image"
+              src="{{item.msgContent}}"
+              object-fit="cover"
+            ></video>
           </view>
         </view>
         <image class="avatar" src="{{myInfo.avatar}}"></image>
+
+      </view>
+      <view wx:else class="my-wrapper-content-only">
+
+        <view wx:if="{{item.msgType === 'text'}}" class="text">
+          <text >{{item.msgContent}}</text>
+        </view>
+        <view wx:elif="{{item.msgType === 'image'}}">
+          <image
+            class="image"
+            src="{{item.msgContent}}"
+            mode="aspectFill"
+            bind:tap="previewImg"
+            data-src="{{item.msgContent}}"
+            lazy-load="{{true}}"
+          ></image>
+        </view>
+        <view wx:elif="{{item.msgType === 'video'}}">
+          <video
+            class="image"
+            src="{{item.msgContent}}"
+            object-fit="cover"
+          ></video>
+        </view>
+
       </view>
     </block>
 
@@ -33,11 +116,17 @@
   <view id="toView" class="test"></view>
 </scroll-view>
 
-<view class="pub-comment">
-  <view class = "pub-left">
-    <input class="pub-input" bindinput="handleInput" value="{{inputValue}}"></input>
+<view wx:if="{{chatId !== null}}" class="pub-comment">
+  <view class="pub-left">
+    <input
+      class="pub-input"
+      cursor-spacing="10"
+      confirm-type="send"
+      bindconfirm="sendMessage"
+      value="{{inputValue}}"
+    ></input>
   </view>
-  <view class="pub-special">
-    <t-icon prefix="wr" name="add_circle" size="58rpx" color="#666" ></t-icon>
+  <view class="pub-special" bindtap="sendFiles">
+    <t-icon prefix="wr" name="add_circle" size="65rpx" color="#666" ></t-icon>
   </view>
 </view>

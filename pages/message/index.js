@@ -1,11 +1,12 @@
-// pages/message/index.js
+const app = getApp();
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    messages: [
+    chatList: [
       {
         userAvatar: 'https://wx.qlogo.cn/mmopen/vi_32/5mKrvn3ibyDNaDZSZics3aoKlz1cv0icqn4EruVm6gKjsK0xvZZhC2hkUkRWGxlIzOEc4600JkzKn9icOLE6zjgsxw/132',
         username: "的发顺丰",
@@ -76,6 +77,28 @@ Page({
    */
   onLoad(options) {
 
+  },
+
+  getChatList(){
+    var that = this;
+    const _ = wx.cloud.database().command
+    wx.cloud.database().collection("chat-record").where(
+      _.or([
+        {
+          userA_id: app.globalData.openid,
+        },
+        {
+          userB_id: app.globalData.openid,
+        }
+      ])
+    ).get({
+      success(res){
+        console.log(res)
+        that.setData({
+          chatList: res.data
+        })
+      }
+    })
   },
 
   /**

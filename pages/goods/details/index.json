@@ -6,6 +6,7 @@
     "price": "/components/price/index",
     "t-image": "/components/webp-image/index",
     "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-popup": "tdesign-miniprogram/popup/popup",
     "bottom-bar": "/components/bottom-bar/index"
   }
 }
