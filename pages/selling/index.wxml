@@ -5,6 +5,7 @@
         src="{{userInfo.avatarUrl || defaultAvatarUrl}}"
         class="selling-avatar"
         bind:tap="tapAvatar"
+        mode="aspectFill"
       />
     </view>
     <view class="create-trade" bindtap="createTrade">

@@ -14,7 +14,7 @@
         <!-- avatar and username and message -->
         <view class="flex-row">
           <view class="user-head">
-            <image src="{{item.userInfo.avatar}}" class="user-avatar" />
+            <image src="{{item.userInfo.avatar}}" class="user-avatar" mode="aspectFill" />
             <view wx:if="{{item.unread}}" class="red-dot"></view>
           </view>
 

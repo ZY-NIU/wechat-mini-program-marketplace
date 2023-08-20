@@ -2,8 +2,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
 .custom-tab-bar-wrapper .text {
   font-size: 20rpx;
+}
+
+.unread {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #ff4040;
+  height: 18rpx;
+  width: 18rpx;
+  border-radius: 9rpx;
 }

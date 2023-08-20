@@ -24,16 +24,23 @@ Page({
     });
 
     app.setUserInfoSub(this.userInfoCallback);
+
+    if (this.data.userInfo.currAuth == 1) {
+      this.getTabBar().bindNotify();
+    }
   },
 
   onShow() {
-    this.getTabBar().init();
+    this.getTabBar().init(app.globalData.unread);
   },
 
   userInfoCallback: function(value) {
     this.setData({
       userInfo: value,
     })
+    if (this.data.userInfo.currAuth== 1) {
+      this.getTabBar().bindNotify();
+    }
   },
 
   tapAvatar() {

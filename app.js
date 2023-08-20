@@ -10,6 +10,8 @@ App({
       cloudAvatarUrl: null,
     },
 
+    unread: false,
+
     userInfoSub: [],
   },
 
@@ -134,6 +136,10 @@ App({
           nickName: name,
         }
 
+        this.globalData.userInfoSub.forEach(element => {
+          element(userInfo);
+        });
+
         wx.cloud.uploadFile({
           cloudPath: `users/avatar/${this.globalData.openid}.${avatar.match(/\.(\w+)$/)[1]}`, // the cloud path to upload
           filePath: res.savedFilePath, // stored file path of avatar
@@ -143,10 +149,6 @@ App({
             this.globalData.userInfo = userInfo;
             // update local userInfo
             wx.setStorageSync('userInfo', userInfo);
-
-            this.globalData.userInfoSub.forEach(element => {
-              element(userInfo);
-            });
 
             let cloudUserInfo = {
               currAuth: 1,
@@ -179,6 +181,24 @@ App({
               }
             })
 
+            // set chat notification
+            wx.cloud.database().collection('chat-notify')
+            .where({
+              _openid: this.globalData.openid
+            })
+            .get()
+            .then((res) => {
+              if (res.data.length == 0) {
+                wx.cloud.database().collection('chat-notify')
+                .add({
+                  data: {
+                    notifyNum: 0,
+                    newChat: 0,
+                  }
+                })
+              }
+            })
+
             wx.hideLoading();
     
             // this.globalData.userInfo.cloudAvatarUrl = res.fileID;
@@ -187,6 +207,8 @@ App({
         })
       }
     })
+
+
   },
 
   setUserInfoSub: function(method) {

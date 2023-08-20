@@ -10,6 +10,7 @@
 	 wx:key="index"
 	>
 		<view class="custom-tab-bar-wrapper">
+			<view wx:if="{{item.hasNotify && unread}}" class="unread"></view>
 			<t-icon prefix="wr" name="{{item.icon}}" size="48rpx" />
 			<view class="text">{{ item.text }}</view>
 		</view>

@@ -27,10 +27,13 @@ Page({
     this.getVersionInfo();
 
     app.setUserInfoSub(this.userInfoCallback);
+    if (this.data.userInfo.currAuth== 1) {
+      this.getTabBar().bindNotify();
+    }
   },
 
   onShow() {
-    this.getTabBar().init();
+    this.getTabBar().init(app.globalData.unread);
     this.init();
   },
 
@@ -46,6 +49,9 @@ Page({
     this.setData({
       userInfo: value,
     })
+    if (this.data.userInfo.currAuth== 1) {
+      this.getTabBar().bindNotify();
+    }
   },
 
   gotoUserEditPage() {

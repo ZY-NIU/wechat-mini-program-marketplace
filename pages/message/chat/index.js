@@ -61,10 +61,7 @@ Page({
               chatId: res.data[0]._id
             })
 
-            db.collection("chat-record").where({
-              _openid: _.or(_.eq(that.data.myInfo.id), _.eq(options.id)),
-              _otherid: _.or(_.eq(that.data.myInfo.id), _.eq(options.id))
-            })
+            db.collection("chat-record").doc(res.data[0]._id)
             .watch({
               onChange: this.onChange.bind(this),
               onError(err) {
@@ -160,10 +157,7 @@ Page({
     const _ = db.command;
     let that = this;
     if (this.data.chatId != null) {
-      db.collection("chat-record").where({
-        _openid: _.or(_.eq(that.data.myInfo.id), _.eq(options.id)),
-        _otherid: _.or(_.eq(that.data.myInfo.id), _.eq(options.id))
-      })
+      db.collection("chat-record").doc(this.data.chatId)
       .update({
         data: {
           chatList: _.push(doc)
@@ -184,18 +178,31 @@ Page({
           chatId: res._id
         })
 
-        db.collection("chat-record").where({
-          _openid: _.or(_.eq(that.data.myInfo.id), _.eq(options.id)),
-          _otherid: _.or(_.eq(that.data.myInfo.id), _.eq(options.id))
-        })
+        db.collection("chat-record").doc(res._id)
         .watch({
           onChange: this.onChange.bind(this),
           onError(err) {
             console.log(err)
           }
         })
+
+        db.collection("chat-notify").where({
+          _openid: _.or(that.data.otherInfo.id, that.data.myInfo.id)
+        }).update({
+          data: {
+            newChat: _.inc(1)
+          }
+        })
       })
     }
+
+    db.collection("chat-notify").where({
+      _openid: that.data.otherInfo.id
+    }).update({
+      data: {
+        notifyNum: _.inc(1)
+      }
+    })
 
     this.setData({
       inputValue: ""
@@ -312,6 +319,7 @@ Page({
     console.log(paths)
     wx.showLoading({
       title: type == 'image' ? '发送图片' : '发送视频',
+      mask: true,
     });
 
     var time = new Date();

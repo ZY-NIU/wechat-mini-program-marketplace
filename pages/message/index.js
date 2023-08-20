@@ -1,5 +1,7 @@
 const app = getApp();
 
+const db = wx.cloud.database();
+
 Page({
 
   data: {
@@ -9,11 +11,36 @@ Page({
   },
 
   onLoad() {
-    var that = this;
-
     app.setUserInfoSub(this.userInfoCallback);
 
-    const db = wx.cloud.database();
+    if (this.data.auth == 1) {
+      this.bindNotify();
+    }
+  },
+
+  userInfoCallback: function(value) {
+    this.setData({
+      auth: value.currAuth,
+    })
+    if (this.data.auth == 1) {
+      this.bindNotify();
+    }
+  },
+
+  bindNotify() {
+    db.collection("chat-notify").where({
+      _openid: app.globalData.openid
+    })
+    .watch({
+      onChange: this.newMessage.bind(this),
+      onError(err) {
+        console.log(err)
+      }
+    })
+  },
+
+  newMessage(e) {
+    var that = this;
     const _ = db.command;
     db.collection("chat-record").where(
       _.or([
@@ -27,36 +54,25 @@ Page({
     ).get({
       success: res => {
         if (res.data.length != 0) {
-          res.data.forEach(chat => {
-            // create a new database and listen to that to see if there is new message
-            db.collection('users')
-            .where({
-              _openid: chat._openid == that.data.openid ? chat._otherid : chat._openid
+          if (e.type == "init") {
+            res.data.forEach(chat => {
+              this.addChat(chat._id, chat._openid, chat._otherid);
             })
-            .get({
-              success: res => {
-                var user = {
-                  chatid: chat._id,
-                  userInfo: {
-                    id: res.data[0]._openid,
-                    avatar: res.data[0].userInfo.cloudAvatarUrl,
-                    name: res.data[0].userInfo.nickName,
-                  }
+          } else if ("newChat" in e.docChanges[0].updatedFields) {
+            let l = that.data.userList.length;
+            res.data.forEach(chat => {
+              var exist = false;
+              for (var i = 0; i < l; i++) {
+                if (chat._id == that.data.userList[i].chatid) {
+                  exist = true;
+                  break;
                 }
-                that.setData({
-                  userList: that.data.userList.concat(user)
-                })
-
-                db.collection("chat-record").doc(chat._id)
-                .watch({
-                  onChange: this.onChange.bind(this),
-                  onError(err) {
-                    console.log(err)
-                  }
-                })
+              }
+              if (!exist) {
+                this.addChat(chat._id, chat._openid, chat._otherid);
               }
             })
-          })
+          }
         }
       },
       fail: err => {
@@ -65,9 +81,34 @@ Page({
     })
   },
 
-  userInfoCallback: function(value) {
-    this.setData({
-      auth: value.currAuth,
+  addChat(chatid, openid, otherid) {
+    var that = this;
+    db.collection('users')
+    .where({
+      _openid: openid == that.data.openid ? otherid : openid
+    })
+    .get({
+      success: res => {
+        var user = {
+          chatid: chatid,
+          userInfo: {
+            id: res.data[0]._openid,
+            avatar: res.data[0].userInfo.cloudAvatarUrl,
+            name: res.data[0].userInfo.nickName,
+          }
+        }
+        that.setData({
+          userList: that.data.userList.concat(user)
+        })
+
+        db.collection("chat-record").doc(chatid)
+        .watch({
+          onChange: this.onChange.bind(this),
+          onError(err) {
+            console.log(err)
+          }
+        })
+      }
     })
   },
 
@@ -86,10 +127,26 @@ Page({
               if (chat[j].id == e.docs[0]._id) {
                 if (chat[j].timestamp < chatInfo.sendTimeTS) {
                   unread = true;
-                  break;
                 }
+                break;
+              }
+              if (j == length-1) {
+                unread = true;
+                let record = {
+                  id: e.docs[0]._id,
+                  timestamp: chatInfo.sendTimeTS - 1
+                }
+                chat = chat.concat(record);
+                wx.setStorageSync('chatRecord', chat);
               }
             }
+          } else {
+            unread = true;
+            let record = {
+              id: e.docs[0]._id,
+              timestamp: chatInfo.sendTimeTS - 1
+            }
+            wx.setStorageSync('chatRecord', [record]);
           }
         }
         
@@ -165,6 +222,14 @@ Page({
    */
   onShow() {
     this.getTabBar().init();
+    app.globalData.unread = false;
+    db.collection('chat-notify').where({
+      _openid: app.globalData.openid
+    })
+    .get()
+    .then(res => {
+      wx.setStorageSync('notifyNum', res.data[0].notifyNum);
+    })
   },
 
   /**

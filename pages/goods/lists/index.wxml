@@ -1,7 +1,7 @@
 <view class="seller-wrap">
   <view class="seller-bar">
     <view class="seller-head">
-      <image src="{{sellerAvatar}}" class="seller-avatar" />
+      <image src="{{sellerAvatar}}" class="seller-avatar" mode="aspectFill" />
       <view class="seller-head-right">
         <view class="seller-username">{{sellerName}}</view>
       </view>

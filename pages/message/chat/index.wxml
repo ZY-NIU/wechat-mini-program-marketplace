@@ -4,7 +4,7 @@
     <block wx:if="{{item.id==otherInfo.id}}">
       <view wx:if="{{!item.textOnly}}" class="other-wrapper">
 
-        <image class="avatar" src="{{otherInfo.avatar}}"></image>
+        <image class="avatar" src="{{otherInfo.avatar}}" mode="aspectFill"></image>
         <view class="msg">
           <view class="text-time">
             <text >{{item.sendTime}}</text>
@@ -83,7 +83,7 @@
             ></video>
           </view>
         </view>
-        <image class="avatar" src="{{myInfo.avatar}}"></image>
+        <image class="avatar" src="{{myInfo.avatar}}" mode="aspectFill"></image>
 
       </view>
       <view wx:else class="my-wrapper-content-only">

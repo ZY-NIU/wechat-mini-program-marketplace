@@ -124,6 +124,7 @@ Page({
   uploadImagesToCloud: async function(paths) {
     wx.showLoading({
       title: '审核图片',
+      mask: true,
     });
 
     var time = new Date();
@@ -266,6 +267,7 @@ Page({
       let message = this.data.mode ? '发布' : '保存';
       wx.showLoading({
         title: message + '中',
+        mask: true,
       });
 
       (async () => {

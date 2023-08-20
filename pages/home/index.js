@@ -45,16 +45,23 @@ Page({
       auth: app.globalData.userInfo.currAuth
     })
     app.setUserInfoSub(this.userInfoCallback);
+
+    if (this.data.auth == 1) {
+      this.getTabBar().bindNotify();
+    }
   },
 
   userInfoCallback: function(value) {
     this.setData({
       auth: value.currAuth,
     })
+    if (this.data.auth == 1) {
+      this.getTabBar().bindNotify();
+    }
   },
 
   onShow() {
-    this.getTabBar().init();
+    this.getTabBar().init(app.globalData.unread);
   },
 
   onReachBottom() {
