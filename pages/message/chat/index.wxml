@@ -116,7 +116,7 @@
   <view id="toView" class="test"></view>
 </scroll-view>
 
-<view wx:if="{{chatId !== null}}" class="pub-comment">
+<view class="pub-comment">
   <view class="pub-left">
     <input
       class="pub-input"

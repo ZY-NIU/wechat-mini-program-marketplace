@@ -1,8 +1,11 @@
+import Toast from 'tdesign-miniprogram/toast/index';
+
 const app = getApp();
 
 Page({
   data: {
     goodsListLoadStatus: 0,
+    auth: 0,
 
     tabList: [
       {
@@ -38,6 +41,16 @@ Page({
   
   onLoad() {
     this.init();
+    this.setData({
+      auth: app.globalData.userInfo.currAuth
+    })
+    app.setUserInfoSub(this.userInfoCallback);
+  },
+
+  userInfoCallback: function(value) {
+    this.setData({
+      auth: value.currAuth,
+    })
   },
 
   onShow() {
@@ -151,6 +164,16 @@ Page({
   },
 
   goodListSaveHandle(e) {
+    if (this.data.auth === 0) {
+      Toast({
+        context: this,
+        selector: '#t-toast',
+        message: '登陆即可保存收藏哦',
+        duration: 1500,
+      });
+      return;
+    }
+
     let length = this.data.goodsList.length;
     for (let i = 0; i < length; i++) {
       if (this.data.goodsList[i]._id == e.detail._id) {

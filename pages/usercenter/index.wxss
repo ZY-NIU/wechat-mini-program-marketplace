@@ -1,5 +1,6 @@
 page {
   background-color: #fff;
+  width: 100%;
 }
 
 .stat-wrapper {
@@ -8,6 +9,7 @@ page {
   align-items: center;
   /* margin-top: 230rpx; */
   padding: 0 20rpx;
+  width: 100%;
 }
 
 .stat-wrapper .stat-item {

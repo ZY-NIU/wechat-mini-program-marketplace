@@ -41,6 +41,10 @@ Page({
               name: res.data[0].userInfo.nickName,
             }
           });
+
+          wx.setNavigationBarTitle({
+            title: res.data[0].userInfo.nickName
+          })
         }
       })
 
@@ -52,33 +56,22 @@ Page({
       })
       .get({
         success: res => {
-          if (res.data.length == 0) {
-            db.collection("chat-record").add({
-              data: {
-                _otherid: options.id,
-                chatList: []
-              }
-            })
-            .then(res => {
-              this.setData({
-                chatId: res._id
-              })
-            })
-          } else {
+          if (res.data.length != 0) {
             this.setData({
               chatId: res.data[0]._id
             })
+
+            db.collection("chat-record").where({
+              _openid: _.or(_.eq(that.data.myInfo.id), _.eq(options.id)),
+              _otherid: _.or(_.eq(that.data.myInfo.id), _.eq(options.id))
+            })
+            .watch({
+              onChange: this.onChange.bind(this),
+              onError(err) {
+                console.log(err)
+              }
+            })
           }
-          db.collection("chat-record").where({
-            _openid: _.or(_.eq(that.data.myInfo.id), _.eq(options.id)),
-            _otherid: _.or(_.eq(that.data.myInfo.id), _.eq(options.id))
-          })
-          .watch({
-            onChange: this.onChange.bind(this),
-            onError(err) {
-              console.log(err)
-            }
-          })
         },
         fail: err => {
           console.log(err)
@@ -106,6 +99,34 @@ Page({
         chatList: newChat
       })
       this.goBottom()
+    }
+
+    // add timestamp to local storage
+    let curTS = this.data.chatList[this.data.chatList.length-1].sendTimeTS;
+    var chat = wx.getStorageSync('chatRecord');
+    if (chat) {
+      let length = chat.length;
+      for (var i = 0; i < length; i++) {
+        if (chat[i].id == this.data.chatId) {
+          chat[i].timestamp = curTS;
+          wx.setStorageSync('chatRecord', chat);
+          break;
+        }
+        if (i == length-1) {
+          let record = {
+            id: this.data.chatId,
+            timestamp: curTS
+          }
+          chat = chat.concat(record);
+          wx.setStorageSync('chatRecord', chat);
+        }
+      }
+    } else {
+      let record = {
+        id: this.data.chatId,
+        timestamp: curTS
+      }
+      wx.setStorageSync('chatRecord', [record]);
     }
   },
 
@@ -138,16 +159,43 @@ Page({
     const db = wx.cloud.database();
     const _ = db.command;
     let that = this;
-    db.collection("chat-record")
-    .doc(that.data.chatId)
-    .update({
-      data: {
-        chatList: _.push(doc)
-      }
-    })
-    .then(res => {
-      that.goBottom()
-    })
+    if (this.data.chatId != null) {
+      db.collection("chat-record").where({
+        _openid: _.or(_.eq(that.data.myInfo.id), _.eq(options.id)),
+        _otherid: _.or(_.eq(that.data.myInfo.id), _.eq(options.id))
+      })
+      .update({
+        data: {
+          chatList: _.push(doc)
+        }
+      })
+      .then(res => {
+        that.goBottom()
+      })
+    } else {
+      db.collection("chat-record").add({
+        data: {
+          _otherid: that.data.otherInfo.id,
+          chatList: [doc]
+        }
+      })
+      .then(res => {
+        this.setData({
+          chatId: res._id
+        })
+
+        db.collection("chat-record").where({
+          _openid: _.or(_.eq(that.data.myInfo.id), _.eq(options.id)),
+          _otherid: _.or(_.eq(that.data.myInfo.id), _.eq(options.id))
+        })
+        .watch({
+          onChange: this.onChange.bind(this),
+          onError(err) {
+            console.log(err)
+          }
+        })
+      })
+    }
 
     this.setData({
       inputValue: ""
@@ -278,7 +326,7 @@ Page({
   },
 
   uploadMediaToCloud: function(path, id) {
-    let cloudPath = `goodImages/${id}.${path.match(/\.(\w+)$/)[1]}`;
+    let cloudPath = `chatImages/${id}.${path.match(/\.(\w+)$/)[1]}`;
     let filePath = path;
     return new Promise((resolve, reject) => {
       wx.cloud.uploadFile({
@@ -315,16 +363,39 @@ Page({
     const db = wx.cloud.database();
     const _ = db.command;
     let that = this;
-    db.collection("chat-record")
-    .doc(that.data.chatId)
-    .update({
-      data: {
-        chatList: _.push(doc)
-      }
-    })
-    .then(res => {
-      that.goBottom()
-    })
+
+    if (this.data.chatId != null) {
+      db.collection("chat-record")
+      .doc(that.data.chatId)
+      .update({
+        data: {
+          chatList: _.push(doc)
+        }
+      })
+      .then(res => {
+        that.goBottom()
+      })
+    } else {
+      db.collection("chat-record").add({
+        data: {
+          _otherid: that.data.otherInfo.id,
+          chatList: [doc]
+        }
+      })
+      .then(res => {
+        this.setData({
+          chatId: res._id
+        })
+
+        db.collection("chat-record").doc(res._id)
+        .watch({
+          onChange: this.onChange.bind(this),
+          onError(err) {
+            console.log(err)
+          }
+        })
+      })
+    }
   },
 
   previewImg(e) {

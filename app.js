@@ -178,6 +178,8 @@ App({
                 })
               }
             })
+
+            wx.hideLoading();
     
             // this.globalData.userInfo.cloudAvatarUrl = res.fileID;
           },

@@ -38,21 +38,18 @@ Page({
 
   tapAvatar() {
     if (this.data.userInfo.currAuth === 0) {
-      let user = {
-        avatar: this.data.userInfo.avatarUrl,
-        name: this.data.userInfo.nickName,
-      }
-      user = JSON.stringify(user);
-      wx.navigateTo({
-        url: '/pages/usercenter/create-user/index?user=' + encodeURIComponent(user),
-      })
+      this.login();
     }
   },
 
   createTrade(e) {
-    this.setData({
-      isCreateTradePopupShow: true,
-    });
+    if (this.data.userInfo.currAuth === 0) {
+      this.login();
+    } else {
+      this.setData({
+        isCreateTradePopupShow: true,
+      });
+    }
   },
 
   handlePopupHide() {
@@ -62,14 +59,33 @@ Page({
   },
 
   gotoCreateItemPage() {
-    wx.navigateTo({
-      url: '/pages/goods/create/item/index?mode=1',
-    })
+    if (this.data.userInfo.currAuth === 0) {
+      this.login();
+    } else {
+      wx.navigateTo({
+        url: '/pages/goods/create/item/index?mode=1',
+      })
+    }
   },
 
   viewMyItems() {
+    if (this.data.userInfo.currAuth === 0) {
+      this.login();
+    } else {
+      wx.navigateTo({
+        url: '/pages/selling/my-goods/index',
+      })
+    }
+  },
+
+  login() {
+    let user = {
+      avatar: this.data.userInfo.avatarUrl,
+      name: this.data.userInfo.nickName,
+    }
+    user = JSON.stringify(user);
     wx.navigateTo({
-      url: '/pages/selling/my-goods/index',
+      url: '/pages/usercenter/create-user/index?user=' + encodeURIComponent(user),
     })
   }
 

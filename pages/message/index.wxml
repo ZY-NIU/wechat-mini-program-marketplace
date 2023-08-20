@@ -1,26 +1,31 @@
-<view wx:if="{{chatList.length==0}}" class='no-message'>
+<view wx:if="{{auth===0}}" class='no-message'>
+登陆体验更多功能哦 ~
+</view>
+
+<view wx:elif="{{userList.length==0}}" class='no-message'>
 快去找找喜欢的物品 ~
 </view>
 
-<view wx:else>
-  <block wx:for="{{chatList}}">
+<view wx:else class='list'>
+  <block wx:for="{{userList}}" wx:for-item="item" wx:key="index">
     <view class="user-list">
       <view class="left" bindtap="startChat" data-index="{{index}}">
 
         <!-- avatar and username and message -->
         <view class="flex-row">
           <view class="user-head">
-            <t-image src="{{item.userAvatar}}" t-class="user-avatar" />
+            <image src="{{item.userInfo.avatar}}" class="user-avatar" />
+            <view wx:if="{{item.unread}}" class="red-dot"></view>
           </view>
 
           <view class="user-details">
-            <view class="user-name">{{item.username}}</view>
-            <view class="msg">{{item.record[item.record.length-1].text}}</view>
+            <view class="user-name">{{item.userInfo.name}}</view>
+            <view class="msg">{{item.msgContent}}</view>
           </view>
         </view>
 
         <!-- time -->
-        <view class="time">{{item.record[item.record.length-1].time}}</view>
+        <view class="time">{{item.sendTime}}</view>
 
       </view>
     </view>

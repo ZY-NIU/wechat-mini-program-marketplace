@@ -5,6 +5,5 @@
     "t-icon": "tdesign-miniprogram/icon/icon",
     "user-center-card": "./components/user-center-card/index",
     "t-toast": "tdesign-miniprogram/toast/toast"
-  },
-  "enablePullDownRefresh": true
+  }
 }

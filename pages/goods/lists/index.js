@@ -1,5 +1,11 @@
+import Toast from 'tdesign-miniprogram/toast/index';
+
+const app = getApp();
+
 Page({
   data: {
+    auth: 0,
+
     sellerId: null,
     sellerAvatar: null,
     sellerName: '',
@@ -14,6 +20,11 @@ Page({
   },
   
   onLoad(options) {
+    this.setData({
+      auth: app.globalData.userInfo.currAuth
+    })
+    app.setUserInfoSub(this.userInfoCallback);
+
     this.setData({
       sellerId: options.id
     })
@@ -34,6 +45,12 @@ Page({
     })
 
     this.init();
+  },
+
+  userInfoCallback: function(value) {
+    this.setData({
+      auth: value.currAuth,
+    })
   },
 
   onShow() {
@@ -127,6 +144,16 @@ Page({
   },
 
   goodListSaveHandle: function(e) {
+    if (this.data.auth === 0) {
+      Toast({
+        context: this,
+        selector: '#t-toast',
+        message: '登陆即可保存收藏哦',
+        duration: 1500,
+      });
+      return;
+    }
+
     let length = this.data.goodsList.length;
     for (let i = 0; i < length; i++) {
       if (this.data.goodsList[i]._id == e.detail._id) {
@@ -153,6 +180,16 @@ Page({
   },
 
   followSeller() {
+    if (this.data.auth === 0) {
+      Toast({
+        context: this,
+        selector: '#t-toast',
+        message: '登陆体验更多功能哦',
+        duration: 1500,
+      });
+      return;
+    }
+
     let followingList = wx.getStorageSync('followingList');
     this.setData({
       isfollowing: !this.data.isfollowing,
@@ -170,4 +207,20 @@ Page({
       }
     }
   },
+
+  toChat() {
+    if (this.data.auth === 0) {
+      Toast({
+        context: this,
+        selector: '#t-toast',
+        message: '登陆体验更多功能哦',
+        duration: 1500,
+      });
+      return;
+    }
+
+    wx.navigateTo({
+      url: '/pages/message/chat/index?id=' + this.data.sellerId,
+    })
+  }
 })

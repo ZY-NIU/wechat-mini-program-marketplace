@@ -1,5 +1,5 @@
 <view class="home-page-header">
-  <view class="search" bind:tap="navToSearchPage">
+  <!-- <view class="search" bind:tap="navToSearchPage">
     <t-search
       t-class-input="t-search__input"
       t-class-input-container="t-search__input-container"
@@ -9,7 +9,7 @@
     >
       <t-icon slot="left-icon" prefix="wr" name="search" size="40rpx" color="#bbb" />
     </t-search>
-  </view>
+  </view> -->
 
   <view class="home-page-tabs">
     <view >
@@ -62,3 +62,4 @@
   />
   <load-more list-is-empty="{{!goodsList.length}}" status="{{goodsListLoadStatus}}" bind:retry="onReTry" />
 </view>
+<t-toast id="t-toast" />

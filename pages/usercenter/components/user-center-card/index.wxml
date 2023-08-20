@@ -1,10 +1,9 @@
 <view class="user-center-card">
   <view class="user-center-card__header" bind:tap="gotoUserEditPage">
-    <t-avatar
-      t-class="avatar"
+    <image
       mode="aspectFill"
       class="user-center-card__header__avatar"
-      image="{{userInfo.avatarUrl || defaultAvatarUrl}}"
+      src="{{userInfo.avatarUrl || defaultAvatarUrl}}"
     />
     <view class="user-center-card__header__name">{{userInfo.nickName || defaultName}}</view>
   </view>

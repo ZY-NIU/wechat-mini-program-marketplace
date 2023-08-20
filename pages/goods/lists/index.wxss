@@ -1,7 +1,7 @@
 .list-container {
   display: block;
   background: #fff;
-  padding: 10rpx 24rpx 100rpx 24rpx;
+  padding: 0 24rpx 100rpx 24rpx;
 }
 
 .list-container .goods-list-container {
@@ -26,13 +26,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 22rpx;
+  margin-top: 30rpx;
 }
 
 .seller-wrap .seller-head {
   display: flex;
   flex-direction: row;
   align-items: center;
+  flex: 1;
+  overflow: hidden;
 }
 
 .seller-wrap .seller-head .seller-avatar {
@@ -43,6 +45,8 @@
 
 .seller-wrap .seller-head .seller-head-right {
   margin-left: 24rpx;
+  flex: 1;
+  overflow: hidden;
 }
 
 .seller-head-right .seller-username {
@@ -50,6 +54,9 @@
   color: #333333;
   line-height: 36rpx;
   font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .seller-wrap .seller-bar .seller-follow {
@@ -59,6 +66,7 @@
   border-radius: 15rpx;
   padding: 10rpx 20rpx;
   margin-right: 20rpx;
+  flex-shrink: 0;
 }
 
 /* bottom bar */

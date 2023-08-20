@@ -5,6 +5,7 @@
     "t-icon": "tdesign-miniprogram/icon/icon",
     "goods-short-list": "/components/goods-short-list/index",
     "load-more": "/components/load-more/index",
+    "t-toast": "tdesign-miniprogram/toast/toast",
     "bottom-bar": "/components/bottom-bar/index"
   }
 }

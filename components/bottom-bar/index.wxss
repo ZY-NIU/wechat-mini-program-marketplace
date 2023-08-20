@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   background-color: #fff;
-  padding: 16rpx 40rpx;
+  padding: 16rpx 45rpx;
 }
 
 .flex-row {
@@ -11,5 +11,5 @@
 }
 
 .flex-row-padding {
-  padding-left: 38rpx;
+  padding-left: 42rpx;
 }

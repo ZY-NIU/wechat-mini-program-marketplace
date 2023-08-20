@@ -32,3 +32,4 @@
     hasRightIcon="{{false}}"
   />
 </view>
+<t-toast id="t-toast" />

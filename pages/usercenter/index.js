@@ -1,3 +1,4 @@
+import Toast from 'tdesign-miniprogram/toast/index';
 
 const app = getApp();
 
@@ -48,14 +49,16 @@ Page({
   },
 
   gotoUserEditPage() {
-    let user = {
-      avatar: app.globalData.userInfo.avatarUrl,
-      name: app.globalData.userInfo.nickName,
+    if (this.data.userInfo.currAuth === 0) {
+      let user = {
+        avatar: this.data.userInfo.avatarUrl,
+        name: this.data.userInfo.nickName,
+      }
+      user = JSON.stringify(user);
+      wx.navigateTo({
+        url: '/pages/usercenter/create-user/index?user=' + encodeURIComponent(user),
+      })
     }
-    user = JSON.stringify(user);
-    wx.navigateTo({
-      url: '/pages/usercenter/create-user/index?user=' + encodeURIComponent(user),
-    })
   },
 
   authHandle() {
@@ -63,18 +66,48 @@ Page({
   },
 
   viewMySave() {
+    if (this.data.userInfo.currAuth === 0) {
+      Toast({
+        context: this,
+        selector: '#t-toast',
+        message: '登陆查看收藏哦',
+        duration: 1500,
+      });
+      return;
+    }
+
     wx.navigateTo({
       url: '/pages/usercenter/my-save/index',
     })
   },
 
   viewMyFollowing() {
+    if (this.data.userInfo.currAuth === 0) {
+      Toast({
+        context: this,
+        selector: '#t-toast',
+        message: '登陆查看关注哦',
+        duration: 1500,
+      });
+      return;
+    }
+
     wx.navigateTo({
       url: '/pages/usercenter/my-following/index',
     })
   },
 
   viewMyItems() {
+    if (this.data.userInfo.currAuth === 0) {
+      Toast({
+        context: this,
+        selector: '#t-toast',
+        message: '登陆查看物品哦',
+        duration: 1500,
+      });
+      return;
+    }
+
     wx.navigateTo({
       url: '/pages/selling/my-goods/index',
     })
