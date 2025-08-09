@@ -1,15 +1,15 @@
-<view class="top-wrap">
+<view wx:if="{{!screenShot}}" class="top-wrap">
   <view class="top-bar">
     <view class="create-trade" bindtap="gotoCreateItemPage">
       <t-icon prefix="wr" name="add_circle" size="39rpx" weight="100"></t-icon>
       <view class="text">新建交易</view>
     </view>
 
-    <view class="share"><t-icon prefix="wr" name="share" size="60rpx" /></view>
+    <button open-type="share" class="share"><t-icon prefix="wr" name="share" size="60rpx" /></button>
   </view>
 </view>
 
-<view class="list-container ">
+<view class="list-container">
   <goods-short-list
     wr-class="goods-list-container"
     goodsList="{{goodsList}}"
@@ -39,5 +39,6 @@
       <view class="text">物品已出售</view>
     </view>
   </view>
+  <slot ></slot>
 </t-popup>
 <t-toast id="t-toast" />

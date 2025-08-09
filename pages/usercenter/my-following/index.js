@@ -52,7 +52,7 @@ Page({
 
   userClickHandle: function(e) {
     wx.navigateTo({
-      url: '/pages/goods/lists/index?id=' + this.data.usersList[e.currentTarget.dataset.index].id,
+      url: '/goods_package/pages/lists/index?id=' + this.data.usersList[e.currentTarget.dataset.index].id,
     });
   },
 
@@ -76,4 +76,12 @@ Page({
       }
     }
   },
+
+  onShareAppMessage() {
+    return {
+      title: "刀刀 · 关注卖家，商品实时更新",
+      path: "/pages/home/index",
+      imageUrl: "",
+    }
+  }
 })

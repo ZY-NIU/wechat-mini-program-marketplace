@@ -15,13 +15,14 @@ App({
     userInfoSub: [],
   },
 
-  onLaunch: function () {
+  onLaunch: async function () {
     wx.cloud.init({
+      // env: 'YOUR_CLOUDBASE_ENV_ID'
       env: 'YOUR_CLOUDBASE_ENV_ID'
     })
 
     // get openId
-    this.getOpenId();
+    await this.getOpenId();
     // get userInfo
     this.getUserInfo();
   },
@@ -30,7 +31,7 @@ App({
     updateManager();
   },
 
-  getOpenId() {
+  async getOpenId() {
     try {
       // get open id from local storage
       var id = wx.getStorageSync('userId');
@@ -38,7 +39,7 @@ App({
         this.globalData.openid = id;
       } else {
         // get openid
-        wx.cloud.callFunction({
+        await wx.cloud.callFunction({
           name: 'getOpenId',
         }).then((res) => {
           if (res.result.openid) {

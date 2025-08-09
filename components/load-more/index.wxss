@@ -18,6 +18,7 @@
 }
 
 .t-class-divider-content {
+  text-align: center;
   margin: 0 10rpx;
   color: #bbbbbb;
 }

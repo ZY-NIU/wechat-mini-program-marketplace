@@ -1,7 +1,6 @@
 {
   "navigationBarTitleText": "个人中心",
   "usingComponents": {
-    "t-popup": "tdesign-miniprogram/popup/popup",
     "t-icon": "tdesign-miniprogram/icon/icon",
     "user-center-card": "./components/user-center-card/index",
     "t-toast": "tdesign-miniprogram/toast/toast"

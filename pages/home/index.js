@@ -27,7 +27,9 @@ Page({
     ],
     locationIndex: 0,
     locationArray: ['Waterloo'],
-    goodsList: []
+    goodsList: [],
+
+    showPrivacy: false
   },
 
   goodListPagination: {
@@ -49,6 +51,29 @@ Page({
     if (this.data.auth == 1) {
       this.getTabBar().bindNotify();
     }
+
+    wx.onNeedPrivacyAuthorization(resolve => {
+      // 需要用户同意隐私授权时
+      // 弹出开发者自定义的隐私授权弹窗
+      this.setData({
+        showPrivacy: true
+      })
+      this.resolvePrivacyAuthorization = resolve
+    })
+
+    wx.requirePrivacyAuthorize({
+      success: () => {
+        // 用户同意授权
+        // 继续小程序逻辑
+      },
+      fail: () => {}, // 用户拒绝授权
+      complete: () => {}
+    })
+  },
+
+  handleAgreePrivacyAuthorization() {
+    // 用户点击同意按钮后
+    this.resolvePrivacyAuthorization({ buttonId: 'agree-btn', event: 'agree' })
   },
 
   userInfoCallback: function(value) {
@@ -89,7 +114,7 @@ Page({
   },
 
   navToSearchPage() {
-    wx.navigateTo({ url: '/pages/goods/search/index' });
+    wx.navigateTo({ url: '/goods_package/pages/search/index' });
   },
 
   tabChangeHandle(e) {
@@ -166,7 +191,7 @@ Page({
 
   goodListClickHandle(e) {
     wx.navigateTo({
-      url: '/pages/goods/details/index?id=' + e.detail._id,
+      url: '/goods_package/pages/details/index?id=' + e.detail._id,
     });
   },
 
@@ -212,6 +237,14 @@ Page({
       if (saveList) {
         wx.setStorageSync('saveList', saveList.filter(item => item !== e.detail._id));
       }
+    }
+  },
+
+  onShareAppMessage() {
+    return {
+      title: "刀刀 · 轻松发布管理闲置",
+      path: "/pages/home/index",
+      imageUrl: "",
     }
   }
 });

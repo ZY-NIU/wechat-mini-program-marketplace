@@ -52,7 +52,7 @@ Page({
 
   goodListClickHandle: function(e) {
     wx.navigateTo({
-      url: '/pages/goods/details/index?id=' + e.detail._id,
+      url: '/goods_package/pages/details/index?id=' + e.detail._id,
     })
   },
 
@@ -81,4 +81,12 @@ Page({
       }
     }
   },
+
+  onShareAppMessage() {
+    return {
+      title: "刀刀 · 收藏关注，随时了解商品详情",
+      path: "/pages/home/index",
+      imageUrl: "",
+    }
+  }
 })

@@ -5,13 +5,18 @@ const db = wx.cloud.database();
 Page({
 
   data: {
-    openid: app.globalData.openid,
-    auth: app.globalData.userInfo.currAuth,
+    openid: null,
+    auth: 0,
     userList: [],
   },
 
   onLoad() {
     app.setUserInfoSub(this.userInfoCallback);
+
+    this.setData({
+      openid: app.globalData.openid,
+      auth: app.globalData.userInfo.currAuth
+    });
 
     if (this.data.auth == 1) {
       this.bindNotify();
@@ -260,10 +265,11 @@ Page({
 
   },
 
-  /**
-   * 用户点击右上角分享
-   */
   onShareAppMessage() {
-
+    return {
+      title: "刀刀 · 轻松发布管理闲置",
+      path: "/pages/home/index",
+      imageUrl: "/images/publish.png",
+    }
   }
 })

@@ -7,8 +7,8 @@ Page({
     chatId: null,
 
     myInfo: {
-      id: app.globalData.openid,
-      avatar: app.globalData.userInfo.avatarUrl,
+      id: null,
+      avatar: null,
     },
     otherInfo: {
       id: null,
@@ -25,6 +25,10 @@ Page({
       this.setData({
         otherInfo: { 
           id: options.id,
+        },
+        myInfo: {
+          id: app.globalData.openid,
+          avatar: app.globalData.userInfo.avatarUrl
         }
       });
       const db = wx.cloud.database();
@@ -412,4 +416,12 @@ Page({
       urls: [e.target.dataset.src]
     })
   },
+
+  onShareAppMessage() {
+    return {
+      title: "刀刀 · 轻松发布管理闲置",
+      path: "/pages/home/index",
+      imageUrl: "/images/selling.png",
+    }
+  }
 })

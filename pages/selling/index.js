@@ -70,7 +70,7 @@ Page({
       this.login();
     } else {
       wx.navigateTo({
-        url: '/pages/goods/create/item/index?mode=1',
+        url: '/goods_package/pages/create/item/index?mode=1',
       })
     }
   },
@@ -94,6 +94,13 @@ Page({
     wx.navigateTo({
       url: '/pages/usercenter/create-user/index?user=' + encodeURIComponent(user),
     })
-  }
+  },
 
+  onShareAppMessage() {
+    return {
+      title: "刀刀 · 轻松发布管理闲置",
+      path: "/pages/home/index",
+      imageUrl: "/images/selling.png",
+    }
+  }
 })

@@ -12,4 +12,9 @@
 
 .flex-row-padding {
   padding-left: 42rpx;
+  background-color: #fff;
+}
+
+.flex-row-padding:after {
+  border: none;
 }

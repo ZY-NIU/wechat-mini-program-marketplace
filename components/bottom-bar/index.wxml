@@ -3,9 +3,9 @@
     <view bindtap="tapOne">
       <t-icon name="edit" size="56rpx" />
     </view>
-    <view class="flex-row-padding" bindtap="tapTwo">
+    <button open-type="share" class="flex-row-padding" bindtap="tapTwo">
       <t-icon prefix="wr" name="share" size="56rpx" />
-    </view>
+    </button>
   </view>
 
   <view class="flex-row" bindtap="tapThree">
@@ -17,9 +17,9 @@
     <view bindtap="tapOne">
       <t-icon name="chat" size="56rpx" />
     </view>
-    <view class="flex-row-padding" bindtap="tapTwo">
+    <button open-type="share" class="flex-row-padding" bindtap="tapTwo">
       <t-icon prefix="wr" name="share" size="56rpx" />
-    </view>
+    </button>
   </view>
 
   <view wx:if="{{ hasIcon }}" class="flex-row" bindtap="tapThree">

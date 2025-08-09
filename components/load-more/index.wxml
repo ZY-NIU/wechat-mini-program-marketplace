@@ -16,9 +16,9 @@
   />
 
   <!-- 已全部加载 -->
-  <t-divider wx:if="{{status === 2}}" t-class="t-class-divider" t-class-content="t-class-divider-content">
-    <text slot="content">{{noMoreText}}</text>
-  </t-divider>
+  <view wx:if="{{status === 2}}" class="t-class-divider-content">
+    <text >{{noMoreText}}</text>
+  </view>
 
   <!-- 加载失败 -->
   <view class="load-more__error" wx:if="{{status===3}}">

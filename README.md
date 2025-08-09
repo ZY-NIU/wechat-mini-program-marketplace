@@ -1,132 +1,105 @@
-<p align="center">
-  <a href="https://tdesign.tencent.com/" target="_blank">
-    <img alt="TDesign Logo" width="200" src="https://tdesign.gtimg.com/site/TDesign.png">
-  </a>
-</p>
+# DaoDao — WeChat Mini Program Marketplace
 
-<p align="center">
-  <a href="https://img.shields.io/github/stars/Tencent/tdesign-miniprogram-starter-retail">
-    <img src="https://img.shields.io/github/stars/Tencent/tdesign-miniprogram-starter-retail" alt="License">
-  </a>  
-  <a href="https://github.com/Tencent/tdesign-miniprogram-starter-retail/issues">
-    <img src="https://img.shields.io/github/issues/Tencent/tdesign-miniprogram-starter-retail" alt="License">
-  </a>  
-  <a href="https://github.com/Tencent/tdesign-miniprogram-starter-retail/LICENSE">
-    <img src="https://img.shields.io/github/license/Tencent/tdesign-miniprogram-starter-retail" alt="License">
-  </a>
-  <a href="https://www.npmjs.com/package/tdesign-miniprogram">
-    <img src="https://img.shields.io/npm/v/tdesign-miniprogram.svg?sanitize=true" alt="Version">
-  </a>
-  <a href="https://www.npmjs.com/package/tdesign-miniprogram">
-    <img src="https://img.shields.io/npm/dw/tdesign-miniprogram" alt="Downloads">
-  </a>
-</p>
+A WeChat Mini Program for a lightweight marketplace with item listings, search, chat, and a user center. Built with WeChat Cloud (CloudBase) and TDesign for WeChat Mini Programs.
 
-# TDesign 零售行业模版示例小程序
+## Features
+- Browse goods: list, short list, and card views
+- Item search and details pages
+- Publish and manage your goods
+- In-app chat with unread notification badge
+- User center: profile (avatar, nickname), favorites and following
+- Custom tab bar UI
 
-TDesign 零售模版示例小程序采用 [TDesign 企业级设计体系小程序解决方案](https://tdesign.tencent.com/miniprogram/overview) 进行搭建，依赖 [TDesign 微信小程序组件库](https://github.com/Tencent/tdesign-miniprogram)，涵盖完整的基本零售场景需求。
+## Tech Stack
+- WeChat Mini Program (微信小程序)
+- WeChat Cloud (CloudBase): database, storage, and cloud functions
+- TDesign for WeChat Mini Program UI (`miniprogram_npm/tdesign-miniprogram`)
 
-## :high_brightness: 预览
-
-<p>请使用微信扫描以下二维码：</p>
-
- <img src="https://we-retail-static-1300977798.cos.ap-guangzhou.myqcloud.com/retail-mp/common/qrcode.jpeg" width = "200" height = "200" alt="模版小程序二维码" align=center />
-
-## :pushpin: 项目介绍
-
-### 1. 业务介绍
-
-零售行业模版小程序是个经典的单店版电商小程序，涵盖了电商的黄金链路流程，从商品->购物车->结算->订单等。小程序总共包含 28 个完整的页面，涵盖首页，商品详情页，个人中心，售后流程等基础页面。采用 mock 数据进行展示，提供了完整的零售商品展示、交易与售后流程。页面详情：
-
-<img src="https://cdn-we-retail.ym.tencent.com/tsr/tdesign-starter-readmeV1.png" width = "650" height = "900" alt="模版小程序页面详情" align=center />
-
-
-
-主要页面截图如下：
-
-<p align="center">
-    <img alt="example-home" width="200" src="https://cdn-we-retail.ym.tencent.com/tsr/example/v1/home.png" />
-    <img alt="example-sort" width="200" src="https://cdn-we-retail.ym.tencent.com/tsr/example/v2/sort.png" />
-    <img alt="example-cart" width="200" src="https://cdn-we-retail.ym.tencent.com/tsr/example/v1/cart.png" />
-    <img alt="example-user-center" width="200" src="https://cdn-we-retail.ym.tencent.com/tsr/example/v1/user-center.png" />
-    <img alt="example-goods-detail" width="200" src="https://cdn-we-retail.ym.tencent.com/tsr/example/v1/goods-detail.png" />
-    <img alt="example-pay" width="200" src="https://cdn-we-retail.ym.tencent.com/tsr/example/v1/pay.png" />
-    <img alt="example-order" width="200" src="https://cdn-we-retail.ym.tencent.com/tsr/example/v1/order.png" />
-    <img alt="example-order-detail" width="200" src="https://cdn-we-retail.ym.tencent.com/tsr/example/v2/order.png" />
-</p>
-
-
-
-### 2. 项目构成
-
-零售行业模版小程序采用基础的 JavaScript + WXSS + ESLint 进行构建，降低了使用门槛。
-
-项目目录结构如下：
-
+## Project Structure
 ```
-|-- tdesign-miniprogram-starter
-    |-- README.md
-    |-- app.js
-    |-- app.json
-    |-- app.wxss
-    |-- components	//	公共组件库
-    |-- config	//	基础配置
-    |-- custom-tab-bar	//	自定义 tabbar
-    |-- model	//	mock 数据
-    |-- pages
-    |   |-- cart	//	购物车相关页面
-    |   |-- coupon	//	优惠券相关页面
-    |   |-- goods	//	商品相关页面
-    |   |-- home	//	首页
-    |   |-- order	//	订单售后相关页面
-    |   |-- promotion-detail	//	营销活动页面
-    |   |-- usercenter	//	个人中心及收货地址相关页面
-    |-- services	//	请求接口
-    |-- style	//	公共样式与iconfont
-    |-- utils	//	工具库
+ daodao/
+  ├─ app.js               # App bootstrap, cloud init, user state
+  ├─ app.json / app.wxss  # Global config and styles
+  ├─ cloud/
+  │   └─ getOpenId/       # Cloud function to fetch OPENID
+  ├─ common/
+  │   └─ updateManager.js # In-app update manager
+  ├─ components/          # UI components (goods list/card, price, etc.)
+  ├─ config/
+  │   └─ constant.js      # Default avatar/name
+  ├─ custom-tab-bar/      # Custom tab bar implementation
+  ├─ goods_package/       # Goods: create, list, details, search pages
+  ├─ pages/
+  │   ├─ home/            # Home feed
+  │   ├─ message/         # Chat list and chat page
+  │   ├─ selling/         # Selling dashboard and my goods
+  │   └─ usercenter/      # User center (profile, favorites, following)
+  ├─ miniprogram_npm/     # Built npm deps (TDesign etc.)
+  ├─ style/               # Global theme and iconfont
+  └─ utils/               # Helpers
 ```
 
-### 3. 数据模拟
+## Prerequisites
+- WeChat DevTools (Latest)
+- A CloudBase environment bound to your Mini Program (小程序已开通云开发)
 
-零售小程序采用真实的接口数据，模拟后端返回逻辑，在小程序展示完整的购物场景与购物体验逻辑。
+## Quick Start
+1. Clone and open in WeChat DevTools
+   - Project directory: the `daodao` folder
+   - Use your own Mini Program AppID
+   - Check "Use CloudBase" (使用云开发)
 
-### 4. 添加新页面
+2. Configure CloudBase env ID
+   - In `app.js`, update `wx.cloud.init({ env: 'your-env-id' })` to your environment ID.
+   - File reference: `app.js` lines near cloud init.
 
-1. 在 `pages `目录下创建对应的页面文件夹
-2. 在 `app.json` 文件中的 ` "pages"` 数组中加上页面路径
-3. [可选] 在 `project.config.json` 文件的 `"miniprogram-list"` 下添加页面配置
+3. Deploy cloud function: getOpenId
+   - In DevTools: Cloud > Functions > Create function named `getOpenId`
+   - Replace its code with `cloud/getOpenId` and upload/deploy (一键上传并部署)
+   - The function returns `openid`, `appid`, `unionid` via `cloud.getWXContext()`
 
-## :hammer: 构建运行
+4. Create CloudBase collections (数据库)
+   - `users`: stores `userInfo` (avatar, nickname, cloudAvatarUrl, auth, etc.)
+   - `chat-notify`: stores unread counters (`notifyNum`, `newChat`)
+   - Suggested permissions during development: “仅创建者可读写”；adjust for production as needed.
 
-1. `npm install`
-2. 小程序开发工具中引入工程
-3. 构建 npm
+5. NPM dependencies
+   - `miniprogram_npm` is checked in. If DevTools prompts, run: Tools > Build NPM (构建 NPM)
 
-## :art: 代码风格控制
+6. Run
+   - Click "Compile" (编译) in DevTools
+   - Use the simulator to navigate tabs, create a profile, publish items, and test chat
 
-`eslint` `prettier`
+## Environment & Data Flow
+- App boot (in `app.js`):
+  - Initializes CloudBase
+  - Fetches `openid` via `getOpenId` cloud function and caches it in `Storage`
+  - Loads `userInfo` from local cache or Cloud DB (`users` collection)
+  - Ensures a `chat-notify` document exists for the current user
+- User profile
+  - Avatars are uploaded to Cloud Storage and the file ID is saved to `users.userInfo.cloudAvatarUrl`
+  - A local saved file path is cached for performance
 
-## :iphone: 基础库版本
+## Development Notes
+- UI library: TDesign components are used from `miniprogram_npm/tdesign-miniprogram`
+- Custom tab bar lives in `custom-tab-bar/`
+- Global defaults (avatar/name) in `config/constant.js`
+- Utilities in `utils/utils.js` (e.g., time formatting)
 
-最低基础库版本`^2.6.5`
+## Roadmap Ideas
+- More robust goods schema and moderation tools
+- Real-time chat message syncing and typing indicators
+- Enhanced search and filters
 
-## :dart: 反馈
+## Contributing
+- Fork, create a feature branch, and open a PR
+- Keep edits focused and documented
 
-企业微信群
-TDesign 团队会及时在企业微信大群中同步发布版本、问题修复信息，也会有一些关于组件库建设的讨论，欢迎微信或企业微信扫码入群交流：
+## License
+PolyForm Noncommercial 1.0.0 — noncommercial use only. See the `LICENSE` file. If you need a commercial license, please contact the author.
 
-<img src="https://oteam-tdesign-1258344706.cos.ap-guangzhou.myqcloud.com/site/doc/TDesign%20IM.png" width = "200" height = "200" alt="模版小程序页面详情" align=center />
+Note: Third-party libraries in `miniprogram_npm/` remain under their own licenses.
 
-
-邮件联系：tdesign@tencent.com
-
-## :link: TDesign 其他技术栈实现
-
-- 移动端 小程序 实现：[mobile-miniprogram](https://github.com/Tencent/tdesign-miniprogram)
-- 桌面端 Vue 2 实现：[web-vue](https://github.com/Tencent/tdesign-vue)
-- 桌面端 Vue 3 实现：[web-vue-next](https://github.com/Tencent/tdesign-vue-next)
-- 桌面端 React 实现：[web-react](https://github.com/Tencent/tdesign-react)
-
-## :page_with_curl: 开源协议
-
-TDesign 遵循 [MIT 协议](https://github.com/Tencent/tdesign-miniprogram-starter-retail/LICENSE)。
+## Acknowledgements
+- Tencent CloudBase
+- TDesign for WeChat Mini Program

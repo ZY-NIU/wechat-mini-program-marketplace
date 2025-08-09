@@ -14,6 +14,8 @@ Page({
     isEditPopupShow: false,
 
     curGoodId: null,
+
+    screenShot: false,
   },
 
   onLoad() {
@@ -96,13 +98,13 @@ Page({
 
   gotoCreateItemPage() {
     wx.navigateTo({
-      url: '/pages/goods/create/item/index?mode=1',
+      url: '/goods_package/pages/create/item/index?mode=1',
     })
   },
 
   goodListClickHandle: function(e) {
     wx.navigateTo({
-      url: '/pages/goods/details/index?id=' + e.detail._id,
+      url: '/goods_package/pages/details/index?id=' + e.detail._id,
     })
   },
 
@@ -115,7 +117,7 @@ Page({
 
   editGoodPage() {
     wx.navigateTo({
-      url: '/pages/goods/create/item/index?mode=0&id=' + this.data.curGoodId,
+      url: '/goods_package/pages/create/item/index?mode=0&id=' + this.data.curGoodId,
     })
   },
 
@@ -213,6 +215,30 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage() {
-
+    var title = '';
+    var image = '';
+    if (this.data.goodsList.length == 0) {
+      title = '闲置';
+      image = '/images/share.png'
+    } else {
+      this.data.goodsList.forEach(e => {
+        title += ' · ';
+        title += e.goodInfo.title;
+      })
+      this.setData({
+        screenShot: true
+      })
+      setTimeout(() => {
+        this.setData({
+          screenShot: false
+        })
+      }, 1000);
+    }
+    
+    return {
+      title: "出" + title,
+      path: '/goods_package/pages/lists/index?id=' + app.globalData.openid,
+      imageUrl: image,
+    }
   }
 })
