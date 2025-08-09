@@ -100,6 +100,10 @@ PolyForm Noncommercial 1.0.0 — noncommercial use only. See the `LICENSE` file.
 
 Note: Third-party libraries in `miniprogram_npm/` remain under their own licenses.
 
+## Security
+- The repository masks the Mini Program `appid` and CloudBase `env` ID. Configure them locally in `project.config.json` and `app.js`.
+- Do not commit local or private files (e.g., `project.private.config.json`, `.DS_Store`). They are ignored by `.gitignore`.
+
 ## Acknowledgements
 - Tencent CloudBase
 - TDesign for WeChat Mini Program

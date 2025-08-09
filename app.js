@@ -17,7 +17,7 @@ App({
 
   onLaunch: async function () {
     wx.cloud.init({
-      // env: 'YOUR_CLOUDBASE_ENV_ID'
+      // env: 'your-cloudbase-env-id'
       env: 'YOUR_CLOUDBASE_ENV_ID'
     })
 
